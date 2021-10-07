@@ -1,0 +1,14 @@
+{
+  "version": "2.0",
+  "app_name": "icfesbot",
+  "iam_policy_file": "policy.json",
+  "stages": {
+    "dev": {
+      "api_gateway_stage": "api",
+      "autogen_policy": false,
+      "environment_variables": {
+        "APP_TABLE_NAME": "icfesbot-app-822b9edb-d82b-425e-84b7-a3f9f7769949"
+      }
+    }
+  }
+}
