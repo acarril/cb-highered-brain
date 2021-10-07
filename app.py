@@ -20,7 +20,7 @@ def get_app_db():
 ### Routes
 
 # Create a message
-@app.route('/msgs', methods=['POST'])
+@app.route('/logs', methods=['POST'])
 def add_new_msg():
     body = app.current_request.json_body
     return get_app_db().add_item(
@@ -29,22 +29,22 @@ def add_new_msg():
     )
 
 # Get all messages
-@app.route('/msgs', methods=['GET'])
-def get_msgs():
+@app.route('/logs', methods=['GET'])
+def get_logs():
     return get_app_db().list_items()
 
 # Get specific message
-@app.route('/msgs/{uid}', methods=['GET'])
+@app.route('/logs/{uid}', methods=['GET'])
 def get_msg(uid):
     return get_app_db().get_item(uid)
 
 # Delete specific message
-@app.route('/msgs/{uid}', methods=['DELETE'])
+@app.route('/logs/{uid}', methods=['DELETE'])
 def delete_msg(uid):
     return get_app_db().delete_item(uid)
 
 # Update specific message
-@app.route('/msgs/{uid}', methods=['PUT'])
+@app.route('/logs/{uid}', methods=['PUT'])
 def update_todo(uid):
     body = app.current_request.json_body
     get_app_db().update_item(
