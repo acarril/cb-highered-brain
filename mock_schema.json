@@ -1,0 +1,23 @@
+[
+    {
+        "user_id": "foo",
+        "sessions":
+        [
+            {
+                "session_id": "session1",
+                "datetime": "datetime1",
+                "messages": [
+                    {
+                        "msg_id": "id",
+                        "datetime": "some_date"
+                    }
+                ]
+            },
+            {
+                "session_id": "session2",
+                "datetime": "datetime2",
+                "messages": {}
+            }
+        ]
+    }
+]
