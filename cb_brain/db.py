@@ -8,7 +8,7 @@ class LogsDB(object):
     def list_items(self):
         pass
 
-    def add_item(self, description, metadata=None):
+    def add_item(self, description, metadata=None, sessions=None):
         pass
 
     def get_item(self, user_id):
@@ -18,7 +18,7 @@ class LogsDB(object):
         pass
 
     def update_item(self, user_id, description=None, state=None,
-                    metadata=None):
+                    metadata=None, sessions=None):
         pass
 
 
@@ -37,7 +37,7 @@ class InMemoryLogsDB(LogsDB):
     def list_items(self, username=DEFAULT_USERNAME):
         return self._state.get(username, {}).values()
 
-    def add_item(self, description, metadata=None, username=DEFAULT_USERNAME):
+    def add_item(self, description, metadata=None, sessions=None, username=DEFAULT_USERNAME):
         if username not in self._state:
             self._state[username] = {}
         user_id = str(uuid4())
@@ -46,7 +46,8 @@ class InMemoryLogsDB(LogsDB):
             'description': description,
             'state': 'unstarted',
             'metadata': metadata if metadata is not None else {},
-            'username': username
+            'username': username,
+            'sessions': sessions if sessions is not None else {}
         }
         return user_id
 
@@ -57,7 +58,7 @@ class InMemoryLogsDB(LogsDB):
         del self._state[username][user_id]
 
     def update_item(self, user_id, description=None, state=None,
-                    metadata=None, username=DEFAULT_USERNAME):
+                    metadata=None, sessions=None, username=DEFAULT_USERNAME):
         item = self._state[username][user_id]
         if description is not None:
             item['description'] = description
@@ -65,6 +66,8 @@ class InMemoryLogsDB(LogsDB):
             item['state'] = state
         if metadata is not None:
             item['metadata'] = metadata
+        if sessions is not None:
+            item['sessions'] = sessions
 
 
 class DynamoDBLogs(LogsDB):
@@ -81,7 +84,7 @@ class DynamoDBLogs(LogsDB):
         )
         return response['Items']
 
-    def add_item(self, description, metadata=None, username=DEFAULT_USERNAME):
+    def add_item(self, description, metadata=None, sessions=None, username=DEFAULT_USERNAME):
         user_id = str(uuid4())
         self._table.put_item(
             Item={
@@ -90,6 +93,7 @@ class DynamoDBLogs(LogsDB):
                 'description': description,
                 'state': 'unstarted',
                 'metadata': metadata if metadata is not None else {},
+                'sessions': sessions if sessions is not None else {},
             }
         )
         return user_id
@@ -112,7 +116,7 @@ class DynamoDBLogs(LogsDB):
         )
 
     def update_item(self, user_id, description=None, state=None,
-                    metadata=None, username=DEFAULT_USERNAME):
+                    metadata=None, sessions=None, username=DEFAULT_USERNAME):
         # We could also use update_item() with an UpdateExpression.
         item = self.get_item(user_id, username)
         if description is not None:
@@ -121,4 +125,6 @@ class DynamoDBLogs(LogsDB):
             item['state'] = state
         if metadata is not None:
             item['metadata'] = metadata
+        if sessions is not None:
+            item['sessions'] = sessions
         self._table.put_item(Item=item)

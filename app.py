@@ -27,6 +27,7 @@ def add_new_msg():
     return get_app_db().add_item(
         description=body['description'],
         metadata=body.get('metadata'),
+        sessions=body.get('sessions'),
     )
 
 # Get all messages
@@ -52,7 +53,8 @@ def update_todo(user_id):
         user_id,
         description=body.get('description'),
         state=body.get('state'),
-        metadata=body.get('metadata'))
+        metadata=body.get('metadata'),
+        sessions=body.get('sessions'))
 
 
 
