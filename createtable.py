@@ -10,7 +10,7 @@ TABLES = {
         'prefix': 'icfesbot-app',
         'env_var': 'APP_TABLE_NAME',
         'hash_key': 'username',
-        'range_key': 'uid'
+        'range_key': 'user_id'
     },
     'users': {
         'prefix': 'users-app',
