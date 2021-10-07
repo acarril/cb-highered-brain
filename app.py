@@ -34,21 +34,21 @@ def get_logs():
     return get_app_db().list_items()
 
 # Get specific message
-@app.route('/logs/{uid}', methods=['GET'])
-def get_msg(uid):
-    return get_app_db().get_item(uid)
+@app.route('/logs/{user_id}', methods=['GET'])
+def get_msg(user_id):
+    return get_app_db().get_item(user_id)
 
 # Delete specific message
-@app.route('/logs/{uid}', methods=['DELETE'])
-def delete_msg(uid):
-    return get_app_db().delete_item(uid)
+@app.route('/logs/{user_id}', methods=['DELETE'])
+def delete_msg(user_id):
+    return get_app_db().delete_item(user_id)
 
 # Update specific message
-@app.route('/logs/{uid}', methods=['PUT'])
-def update_todo(uid):
+@app.route('/logs/{user_id}', methods=['PUT'])
+def update_todo(user_id):
     body = app.current_request.json_body
     get_app_db().update_item(
-        uid,
+        user_id,
         description=body.get('description'),
         state=body.get('state'),
         metadata=body.get('metadata'))

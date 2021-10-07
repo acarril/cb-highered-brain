@@ -11,13 +11,13 @@ class LogsDB(object):
     def add_item(self, description, metadata=None):
         pass
 
-    def get_item(self, uid):
+    def get_item(self, user_id):
         pass
 
-    def delete_item(self, uid):
+    def delete_item(self, user_id):
         pass
 
-    def update_item(self, uid, description=None, state=None,
+    def update_item(self, user_id, description=None, state=None,
                     metadata=None):
         pass
 
@@ -40,25 +40,25 @@ class InMemoryLogsDB(LogsDB):
     def add_item(self, description, metadata=None, username=DEFAULT_USERNAME):
         if username not in self._state:
             self._state[username] = {}
-        uid = str(uuid4())
-        self._state[username][uid] = {
-            'uid': uid,
+        user_id = str(uuid4())
+        self._state[username][user_id] = {
+            'user_id': user_id,
             'description': description,
             'state': 'unstarted',
             'metadata': metadata if metadata is not None else {},
             'username': username
         }
-        return uid
+        return user_id
 
-    def get_item(self, uid, username=DEFAULT_USERNAME):
-        return self._state[username][uid]
+    def get_item(self, user_id, username=DEFAULT_USERNAME):
+        return self._state[username][user_id]
 
-    def delete_item(self, uid, username=DEFAULT_USERNAME):
-        del self._state[username][uid]
+    def delete_item(self, user_id, username=DEFAULT_USERNAME):
+        del self._state[username][user_id]
 
-    def update_item(self, uid, description=None, state=None,
+    def update_item(self, user_id, description=None, state=None,
                     metadata=None, username=DEFAULT_USERNAME):
-        item = self._state[username][uid]
+        item = self._state[username][user_id]
         if description is not None:
             item['description'] = description
         if state is not None:
@@ -82,39 +82,39 @@ class DynamoDBLogs(LogsDB):
         return response['Items']
 
     def add_item(self, description, metadata=None, username=DEFAULT_USERNAME):
-        uid = str(uuid4())
+        user_id = str(uuid4())
         self._table.put_item(
             Item={
                 'username': username,
-                'uid': uid,
+                'user_id': user_id,
                 'description': description,
                 'state': 'unstarted',
                 'metadata': metadata if metadata is not None else {},
             }
         )
-        return uid
+        return user_id
 
-    def get_item(self, uid, username=DEFAULT_USERNAME):
+    def get_item(self, user_id, username=DEFAULT_USERNAME):
         response = self._table.get_item(
             Key={
                 'username': username,
-                'uid': uid,
+                'user_id': user_id,
             },
         )
         return response['Item']
 
-    def delete_item(self, uid, username=DEFAULT_USERNAME):
+    def delete_item(self, user_id, username=DEFAULT_USERNAME):
         self._table.delete_item(
             Key={
                 'username': username,
-                'uid': uid,
+                'user_id': user_id,
             }
         )
 
-    def update_item(self, uid, description=None, state=None,
+    def update_item(self, user_id, description=None, state=None,
                     metadata=None, username=DEFAULT_USERNAME):
         # We could also use update_item() with an UpdateExpression.
-        item = self.get_item(uid, username)
+        item = self.get_item(user_id, username)
         if description is not None:
             item['description'] = description
         if state is not None:
