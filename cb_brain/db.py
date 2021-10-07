@@ -4,7 +4,7 @@ from boto3.dynamodb.conditions import Key
 
 DEFAULT_USERNAME = 'default'
 
-class MsgsDB(object):
+class LogsDB(object):
     def list_items(self):
         pass
 
@@ -22,7 +22,7 @@ class MsgsDB(object):
         pass
 
 
-class InMemoryMsgsDB(MsgsDB):
+class InMemoryLogsDB(LogsDB):
     def __init__(self, state=None):
         if state is None:
             state = {}
@@ -67,7 +67,7 @@ class InMemoryMsgsDB(MsgsDB):
             item['metadata'] = metadata
 
 
-class DynamoDBMsgs(MsgsDB):
+class DynamoDBLogs(LogsDB):
     def __init__(self, table_resource):
         self._table = table_resource
 
