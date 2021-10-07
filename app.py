@@ -1,5 +1,6 @@
 from chalice import Chalice
 from cb_brain import db
+from chalice import NotFoundError
 
 import os
 import boto3
