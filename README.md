@@ -1,4 +1,4 @@
-# ICFES Bot Brain
+# Chatbot - Higher Ed - Brain
 
 ## REST API
 
