@@ -17,7 +17,7 @@ class LogsDB(object):
     def delete_item(self, user_id):
         pass
 
-    def update_item(self, user_id, description=None, state=None,
+    def update_item(self, user_id,description=None,
                     metadata=None, sessions=None):
         pass
 
@@ -44,7 +44,6 @@ class InMemoryLogsDB(LogsDB):
         self._state[username][user_id] = {
             'user_id': user_id,
             'description': description,
-            'state': 'unstarted',
             'metadata': metadata if metadata is not None else {},
             'username': username,
             'sessions': sessions if sessions is not None else {}
@@ -57,13 +56,11 @@ class InMemoryLogsDB(LogsDB):
     def delete_item(self, user_id, username=DEFAULT_USERNAME):
         del self._state[username][user_id]
 
-    def update_item(self, user_id, description=None, state=None,
+    def update_item(self, user_id, description=None,
                     metadata=None, sessions=None, username=DEFAULT_USERNAME):
         item = self._state[username][user_id]
         if description is not None:
             item['description'] = description
-        if state is not None:
-            item['state'] = state
         if metadata is not None:
             item['metadata'] = metadata
         if sessions is not None:
@@ -91,7 +88,6 @@ class DynamoDBLogs(LogsDB):
                 'username': username,
                 'user_id': user_id,
                 'description': description,
-                'state': 'unstarted',
                 'metadata': metadata if metadata is not None else {},
                 'sessions': sessions if sessions is not None else {},
             }
@@ -115,14 +111,12 @@ class DynamoDBLogs(LogsDB):
             }
         )
 
-    def update_item(self, user_id, description=None, state=None,
+    def update_item(self, user_id, description=None,
                     metadata=None, sessions=None, username=DEFAULT_USERNAME):
         # We could also use update_item() with an UpdateExpression.
         item = self.get_item(user_id, username)
         if description is not None:
             item['description'] = description
-        if state is not None:
-            item['state'] = state
         if metadata is not None:
             item['metadata'] = metadata
         if sessions is not None:

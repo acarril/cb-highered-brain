@@ -10,6 +10,7 @@ app.debug = True
 _DB = None
 
 def get_app_db():
+    '''Get chatbot database using DynamoDBLogs backend'''
     global _DB
     if _DB is None:
         _DB = db.DynamoDBLogs(
@@ -52,7 +53,6 @@ def update_todo(user_id):
     get_app_db().update_item(
         user_id,
         description=body.get('description'),
-        state=body.get('state'),
         metadata=body.get('metadata'),
         sessions=body.get('sessions'))
 
