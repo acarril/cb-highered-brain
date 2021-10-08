@@ -23,6 +23,7 @@ class LogsDB(object):
 
 
 class InMemoryLogsDB(LogsDB):
+    '''Class for in-memory databse of logs (for testing)'''
     def __init__(self, state=None):
         if state is None:
             state = {}
@@ -68,6 +69,7 @@ class InMemoryLogsDB(LogsDB):
 
 
 class DynamoDBLogs(LogsDB):
+    '''Class for DynamoDB database of logs'''
     def __init__(self, table_resource):
         self._table = table_resource
 
