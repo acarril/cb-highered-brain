@@ -14,7 +14,7 @@ def get_app_db():
     global _DB
     if _DB is None:
         _DB = db.DynamoDBLogs(
-            boto3.resource('dynamodb').Table(os.environ['APP_TABLE_NAME'])
+            boto3.resource('dynamodb').Table(os.environ['LOGS_TABLE_NAME'])
         )
     return _DB
 
