@@ -7,7 +7,8 @@
       "api_gateway_stage": "api",
       "autogen_policy": false,
       "environment_variables": {
-        "APP_TABLE_NAME": "icfesbot-app-766a953a-0c79-4115-b751-6394e2ce9545"
+        "USERS_TABLE_NAME": "icfesbot-users-2021",
+        "LOGS_TABLE_NAME": "icfesbot-logs-2021"
       }
     }
   }
