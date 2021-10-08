@@ -22,7 +22,7 @@ TABLES = {
 
 
 def create_table(table_name_prefix, hash_key, range_key=None):
-    table_name = '%s-%s' % (table_name_prefix, str(uuid.uuid4()))
+    table_name = table_name_prefix
     client = boto3.client('dynamodb')
     key_schema = [
         {
