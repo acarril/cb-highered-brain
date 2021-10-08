@@ -16,8 +16,8 @@ TABLES = {
         'prefix': 'icfesbot-logs-2021',
         'env_var': 'LOGS_TABLE_NAME',
         # 'hash_key': 'session_id',
-        'hash_key': 'username',
-        'range_key': 'message_id'
+        'hash_key': 'username'
+        # 'range_key': 'message_id'
     }
 }
 
