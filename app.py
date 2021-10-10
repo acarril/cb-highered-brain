@@ -29,12 +29,13 @@ def add_new_msg():
         description=body['description'],
         metadata=body.get('metadata'),
         sessions=body.get('sessions'),
+        session_id=body.get('session_id')
     )
 
 # Get all messages
 @app.route('/logs', methods=['GET'])
 def get_logs():
-    return get_app_db().list_items()
+    return get_app_db().list_all_items()
 
 # Get specific message
 @app.route('/logs/{user_id}', methods=['GET'])
