@@ -4,7 +4,7 @@ from boto3.dynamodb.conditions import Key
 
 DEFAULT_USERNAME = 'default'
 
-class LogsDB(object):
+class ChatBotDB(object):
     def list_items(self):
         pass
 
@@ -22,7 +22,7 @@ class LogsDB(object):
         pass
 
 
-# class InMemoryLogsDB(LogsDB):
+# class InMemoryLogsDB(ChatBotDB):
 #     '''Class for in-memory databse of logs (for testing)'''
 #     def __init__(self, state=None):
 #         if state is None:
@@ -68,7 +68,7 @@ class LogsDB(object):
 #             item['sessions'] = sessions
 
 
-class DynamoDBLogs(LogsDB):
+class DynamoDBLogs(ChatBotDB):
     '''Class for DynamoDB database of logs'''
     def __init__(self, table_resource):
         self._table = table_resource
