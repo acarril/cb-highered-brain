@@ -22,52 +22,6 @@ class ChatBotDB(object):
         pass
 
 
-# class InMemoryLogsDB(ChatBotDB):
-#     '''Class for in-memory databse of logs (for testing)'''
-#     def __init__(self, state=None):
-#         if state is None:
-#             state = {}
-#         self._state = state
-
-#     def list_all_items(self):
-#         all_items = []
-#         for username in self._state:
-#             all_items.extend(self.list_items(username))
-#         return all_items
-
-#     def list_items(self, username=DEFAULT_USERNAME):
-#         return self._state.get(username, {}).values()
-
-#     def add_item(self, description, metadata=None, sessions=None, username=DEFAULT_USERNAME):
-#         if username not in self._state:
-#             self._state[username] = {}
-#         user_id = str(uuid4())
-#         self._state[username][user_id] = {
-#             'user_id': user_id,
-#             'description': description,
-#             'metadata': metadata if metadata is not None else {},
-#             'username': username,
-#             'sessions': sessions if sessions is not None else {}
-#         }
-#         return user_id
-
-#     def get_item(self, user_id, username=DEFAULT_USERNAME):
-#         return self._state[username][user_id]
-
-#     def delete_item(self, user_id, username=DEFAULT_USERNAME):
-#         del self._state[username][user_id]
-
-#     def update_item(self, user_id, description=None,
-#                     metadata=None, sessions=None, username=DEFAULT_USERNAME):
-#         item = self._state[username][user_id]
-#         if description is not None:
-#             item['description'] = description
-#         if metadata is not None:
-#             item['metadata'] = metadata
-#         if sessions is not None:
-#             item['sessions'] = sessions
-
-
 class DynamoDBLogs(ChatBotDB):
     '''Class for DynamoDB database of logs'''
     def __init__(self, table_resource):
