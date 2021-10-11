@@ -1,17 +1,28 @@
 from uuid import uuid4
-
-from boto3.dynamodb.conditions import Key
+from datetime import datetime, timezone
 
 DEFAULT_USERNAME = 'default'
 
 class ChatBotDB(object):
-    def list_items(self):
+    '''Class for DynamoDB database of users'''
+    def __init__(self, table_resource):
+        self._table = table_resource
+
+    def list_all_items(self):
+        '''List all items of table'''
+        response = self._table.scan()
+        return response['Items']
+
+    def list_item(self, primary_key, secondary_key=None, filter=None):
+        response = self._table.query(
+            KeyConditionExpression=Key(list(primary_key.keys())[0]).eq(list(primary_key.values())[0])
+        )
+        return response['Items']
+
+    def add_item(self):
         pass
 
-    def add_item(self, description, metadata=None, sessions=None):
-        pass
-
-    def get_item(self, user_id):
+    def get_item(self, user_id, sort_key=None):
         pass
 
     def delete_item(self, user_id):
@@ -20,6 +31,32 @@ class ChatBotDB(object):
     def update_item(self, user_id,description=None,
                     metadata=None, sessions=None):
         pass
+
+
+class DynamoDBUsers(ChatBotDB):
+    def add_item(self, hash_key, session_id, session_time, user_type=None):
+        self._table.put_item(
+            Item={
+                'user_id': hash_key if hash_key is not None else str(uuid4()),
+                'session_time': session_time if session_time is not None else datetime.now(timezone.utc).isoformat(),
+                'session_id': session_id if session_id is not None else str(uuid4()),
+                'user_type': user_type if user_type is not None else {}
+            }
+        )
+        return hash_key
+
+    def get_item(self, user_id, sort_key=None):
+        response = self._table.get_item(
+            Key={
+                'user_id': user_id,
+            },
+        )
+        return response
+
+    def query_item(self, filter_key='user_id', filter_value='alvaro'):
+        filtering_exp = Key('user_id').eq('alvaro')
+        response = self._table.query(KeyConditionExpression=filtering_exp)
+        return response['Items']
 
 
 class DynamoDBLogs(ChatBotDB):
