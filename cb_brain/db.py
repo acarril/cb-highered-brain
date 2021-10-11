@@ -1,5 +1,6 @@
 from uuid import uuid4
 from datetime import datetime, timezone
+from boto3.dynamodb.conditions import Key
 
 DEFAULT_USERNAME = 'default'
 
@@ -25,8 +26,13 @@ class ChatBotDB(object):
     def get_item(self, user_id, sort_key=None):
         pass
 
-    def delete_item(self, user_id):
-        pass
+    def delete_item(self, primary_key, secondary_key=None, filter=None):
+        # return [list(primary_key.keys())[0], list(primary_key.values())[0]]
+        self._table.delete_item(
+            Key={
+                list(primary_key.keys())[0]: list(primary_key.values())[0],
+            }
+        )
 
     def update_item(self, user_id,description=None,
                     metadata=None, sessions=None):
