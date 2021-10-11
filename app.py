@@ -83,11 +83,15 @@ def add_new_user():
 
 @app.route('/users', methods=['GET'])
 def get_all_users():
-    '''List all users'''
+    '''Get all users'''
     return get_users_db().list_all_items()
 
-# Get all sessions from specific user
 @app.route('/users/{user_id}', methods=['GET'])
 def get_user(user_id):
-    '''List specific user_id'''
+    '''Get all sessions from specific user_id'''
     return get_users_db().list_item(primary_key={'user_id': user_id})
+
+@app.route('/users/{user_id}', methods=['DELETE'])
+def delete_user(user_id):
+    '''Delete all sessions of specific user'''
+    return get_users_db().delete_item(primary_key={'user_id': user_id})
