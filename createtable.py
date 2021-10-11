@@ -12,12 +12,15 @@ TABLES = {
         'hash_key': 'user_id',
         'range_key': 'session_time'
     },
+    'sessions': {
+        'prefix': 'icfesbot-sessions-2021',
+        'env_var': 'SESSIONS_TABLE_NAME',
+        'hash_key': 'session_id'
+    },
     'logs': {
         'prefix': 'icfesbot-logs-2021',
         'env_var': 'LOGS_TABLE_NAME',
         'hash_key': 'session_id'
-        # 'hash_key': 'username'
-        # 'range_key': 'message_id'
     }
 }
 
@@ -72,7 +75,7 @@ def main():
     # app - stores the todo items
     # users - stores the user data.
     parser.add_argument('-t', '--table-type', default='logs',
-                        choices=['logs', 'users'],
+                        choices=['logs', 'users', 'sessions'],
                         help='Specify which type to create')
     args = parser.parse_args()
     table_config = TABLES[args.table_type]

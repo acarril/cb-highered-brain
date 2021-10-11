@@ -1,3 +1,4 @@
+from botocore.session import get_session
 from chalice import Chalice
 from cb_brain import db
 from chalice import NotFoundError
@@ -9,6 +10,7 @@ app = Chalice(app_name='icfesbot')
 app.debug = True
 _DB = None
 _USER_DB = None
+_SESSIONS_BD = None
 
 def get_app_db():
     '''Get chatbot database using DynamoDBLogs backend'''
@@ -25,10 +27,34 @@ def get_users_db():
         _USER_DB = db.DynamoDBUsers(
             boto3.resource('dynamodb').Table(os.environ['USERS_TABLE_NAME'])
         )
-            
     return _USER_DB
 
+def get_sessions_db():
+    global _SESSIONS_BD
+    if _SESSIONS_BD is None:
+        _SESSIONS_BD = db.DynamoDBSessions(
+            boto3.resource('dynamodb').Table(os.environ['SESSIONS_TABLE_NAME'])
+        )
+    return _SESSIONS_BD
+
 ### Routes
+
+## SESSIONS
+
+# Get all sessions
+@app.route('/sessions', methods=['GET'])
+def get_sessions():
+    '''Get all sessions'''
+    return get_sessions_db().list_all_items()
+
+@app.route('/sessions/{user_id}', methods=['POST'])
+def add_new_session(user_id):
+    '''Add new session to database'''
+    body = app.current_request.json_body
+    return get_sessions_db().add_item(
+        user_id=user_id,
+        session_time=body.get('session_time') if body is not None else None
+    )
 
 # Create a message
 @app.route('/logs', methods=['POST'])

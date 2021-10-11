@@ -1,5 +1,6 @@
 from uuid import uuid4
 from datetime import datetime, timezone
+import uuid
 from boto3.dynamodb.conditions import Key
 
 DEFAULT_USERNAME = 'default'
@@ -38,6 +39,19 @@ class ChatBotDB(object):
                     metadata=None, sessions=None):
         pass
 
+
+class DynamoDBSessions(ChatBotDB):
+    def get_item(self):
+        pass
+
+    def add_item(self, user_id, session_time, session_id=None):
+        self._table.put_item(
+            Item={
+                'session_id': session_id if session_id is not None else str(uuid4()),
+                'user_id': user_id,
+                'session_time': session_time if session_time is not None else datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
 class DynamoDBUsers(ChatBotDB):
     def add_item(self, hash_key, session_id, session_time, user_type=None):
