@@ -8,6 +8,7 @@ import boto3
 app = Chalice(app_name='icfesbot')
 app.debug = True
 _DB = None
+_USER_DB = None
 
 def get_app_db():
     '''Get chatbot database using DynamoDBLogs backend'''
@@ -18,6 +19,14 @@ def get_app_db():
         )
     return _DB
 
+def get_users_db():
+    global _USER_DB
+    if _USER_DB is None:
+        _USER_DB = db.DynamoDBUsers(
+            boto3.resource('dynamodb').Table(os.environ['USERS_TABLE_NAME'])
+        )
+            
+    return _USER_DB
 
 ### Routes
 
@@ -59,36 +68,26 @@ def update_todo(user_id):
 
 
 
-
-
-
-
-########
-
-@app.route('/')
-def index():
-    return {'hello': 'world'}
-
-@app.route('/hello/{name}')
-def hello_name(name):
-   return {'hello': name}
+### Users
 
 @app.route('/users', methods=['POST'])
-def create_user():
-    user_as_json = app.current_request.json_body
-    return {'user': user_as_json}
+def add_new_user():
+    '''Add new user to users database'''
+    body = app.current_request.json_body
+    return get_users_db().add_item(
+        hash_key=body.get('user_id'),
+        session_time=body.get('session_time'),
+        session_id=body.get('session_id'),
+        user_type=body.get('user_type')
+    )
 
-OBJECTS = {
-}
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    '''List all users'''
+    return get_users_db().list_all_items()
 
-@app.route('/objects/{key}', methods=['GET', 'PUT'])
-def myobject(key):
-    request = app.current_request
-    if request.method == 'PUT':
-        OBJECTS[key] = request.json_body
-    elif request.method == 'GET':
-        try:
-            return {key: OBJECTS[key]}
-        except KeyError:
-            raise NotFoundError(key)
-
+# Get all sessions from specific user
+@app.route('/users/{user_id}', methods=['GET'])
+def get_user(user_id):
+    '''List specific user_id'''
+    return get_users_db().list_item(primary_key={'user_id': user_id})
