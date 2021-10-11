@@ -10,7 +10,7 @@ TABLES = {
         'prefix': 'icfesbot-users-2021',
         'env_var': 'USERS_TABLE_NAME',
         'hash_key': 'user_id',
-        'range_key': 'session_id'
+        'range_key': 'session_time'
     },
     'logs': {
         'prefix': 'icfesbot-logs-2021',
