@@ -7,10 +7,7 @@
       "api_gateway_stage": "api",
       "autogen_policy": false,
       "environment_variables": {
-        "USERS_TABLE_NAME": "icfesbot-users-2021",
-        "LOGS_TABLE_NAME": "icfesbot-logs-2021",
-        "SESSIONS_TABLE_NAME": "icfesbot-sessions-2021",
-        "MESSAGES_TABLE_NAME": "icfesbot-messages-2021"
+        "SESSIONS_TABLE_NAME": "icfesbot-sessions-2021"
       }
     }
   }
