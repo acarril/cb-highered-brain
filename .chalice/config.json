@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "app_name": "icfesbot",
+  "app_name": "cb-highered-brain",
   "iam_policy_file": "policy.json",
   "stages": {
     "dev": {
@@ -9,7 +9,8 @@
       "environment_variables": {
         "USERS_TABLE_NAME": "icfesbot-users-2021",
         "LOGS_TABLE_NAME": "icfesbot-logs-2021",
-        "SESSIONS_TABLE_NAME": "icfesbot-sessions-2021"
+        "SESSIONS_TABLE_NAME": "icfesbot-sessions-2021",
+        "MESSAGES_TABLE_NAME": "icfesbot-messages-2021"
       }
     }
   }
