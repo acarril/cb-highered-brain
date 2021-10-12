@@ -39,12 +39,17 @@ def get_sessions():
 
 @app.route('/sessions/{user_id}', methods=['POST'])
 def add_new_session(user_id):
-    '''Add new session to database'''
+    '''Add new session associated to `user_id`'''
     body = app.current_request.json_body
     return get_sessions_db().add_item(
         user_id=user_id,
         session_time=body.get('session_time') if body is not None else None
     )
+
+@app.route('/users/{user_id}', methods=['GET'])
+def get_user_session(user_id):
+    '''Get all sessions of `user_id` (requires GSI)'''
+    return get_sessions_db().get_user(user_id=user_id)
 
 
 ## LOGS
