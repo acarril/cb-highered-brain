@@ -30,3 +30,9 @@ Data generated in the chatbot is stored in two [DynamoDB](https://docs.aws.amazo
   - Partition key: `log_id` (String)
   - Sort key: NA
   - GSI: NA
+
+#### Note on efficient partitioning of user-sessions
+
+User-Session data is stored in `icfesbot-sessions-2021`, where `session_id` is the partition key, and `user_id` is only an attribute. We avoid using `user_id` as a partition key (with `session_id` as a sort key) because DynamoDB scales efficiently by assigning a table's partition to different nodes, and we expect the generic "public user" to experience a high number of concurrent operations. Tables partitioned by session sidestep this issue. See [here](https://aws.amazon.com/blogs/database/choosing-the-right-dynamodb-partition-key/) for more information.
+
+Because accessing the sessions of a given user is important, we implement a [Global Secondary Index (GSI)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html) on the `user_id` attribute. The endpoint methods associated to this GSI are of the form `/user/`.
