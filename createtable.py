@@ -10,7 +10,8 @@ TABLES = {
         'prefix': 'icfesbot',
         'suffix': '2021',
         'env_var': 'SESSIONS_TABLE_NAME',
-        'hash_key': 'session_id'
+        'hash_key': 'session_id',
+        'gsi_partition_key': 'user_id'
     },
     'logs': {
         'prefix': 'icfesbot',
@@ -21,7 +22,7 @@ TABLES = {
 }
 
 
-def create_table(table_name, hash_key, range_key=None):
+def create_table(table_name, hash_key, range_key=None, gsi_partition_key=None):
     client = boto3.client('dynamodb')
     key_schema = [
         {
@@ -50,6 +51,38 @@ def create_table(table_name, hash_key, range_key=None):
     )
     waiter = client.get_waiter('table_exists')
     waiter.wait(TableName=table_name, WaiterConfig={'Delay': 1})
+    if gsi_partition_key is not None:
+        gsi = [
+            {
+                'Create': {
+                    'IndexName': '-'.join([gsi_partition_key, 'index']),
+                    'KeySchema': [
+                        {
+                            'AttributeName': gsi_partition_key,
+                            'KeyType': 'HASH'
+                        }
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL'
+                    },
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': 5,
+                        'WriteCapacityUnits': 5
+                    }
+                }
+                
+            }
+        ]
+        response = client.update_table(
+            AttributeDefinitions=[
+                {
+                    'AttributeName': gsi_partition_key,
+                    'AttributeType': 'S'
+                }
+            ],
+            TableName=table_name,
+            GlobalSecondaryIndexUpdates=gsi
+        )
     return table_name
 
 
@@ -77,7 +110,8 @@ def main():
     table_name = create_table(
         '-'.join([table_config['prefix'], args.table_type, table_config['suffix']]),
         table_config['hash_key'],
-        table_config.get('range_key')
+        table_config.get('range_key'),
+        table_config.get('gsi_partition_key')
     )
     record_as_env_var(table_config['env_var'], table_name, args.stage)
 
