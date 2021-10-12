@@ -44,12 +44,21 @@ class DynamoDBSessions(ChatBotDB):
     def get_item(self):
         pass
 
+    def get_user(self, user_id, response_element):
+        response_element = response_element if response_element is not None else 'Items'
+        response = self._table.query(
+            IndexName='user_id-index',
+            KeyConditionExpression=Key('user_id').eq(user_id)
+        )
+        return response[response_element]
+
     def add_item(self, user_id, session_time, session_id=None):
         self._table.put_item(
             Item={
                 'session_id': session_id if session_id is not None else str(uuid4()),
                 'user_id': user_id,
                 'session_time': session_time if session_time is not None else datetime.now(timezone.utc).isoformat(),
+                'session_n': self.get_user(user_id, response_element='Count')+1,
             }
         )
 
