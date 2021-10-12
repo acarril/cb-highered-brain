@@ -7,20 +7,21 @@ import boto3
 
 TABLES = {
     'sessions': {
-        'prefix': 'icfesbot-sessions-2021',
+        'prefix': 'icfesbot',
+        'suffix': '2021',
         'env_var': 'SESSIONS_TABLE_NAME',
         'hash_key': 'session_id'
     },
     'logs': {
-        'prefix': 'icfesbot-logs-2021',
+        'prefix': 'icfesbot',
+        'suffix': '2021',
         'env_var': 'LOGS_TABLE_NAME',
         'hash_key': 'log_id'
     }
 }
 
 
-def create_table(table_name_prefix, hash_key, range_key=None):
-    table_name = table_name_prefix
+def create_table(table_name, hash_key, range_key=None):
     client = boto3.client('dynamodb')
     key_schema = [
         {
@@ -74,7 +75,8 @@ def main():
     args = parser.parse_args()
     table_config = TABLES[args.table_type]
     table_name = create_table(
-        table_config['prefix'], table_config['hash_key'],
+        '-'.join([table_config['prefix'], args.table_type, table_config['suffix']]),
+        table_config['hash_key'],
         table_config.get('range_key')
     )
     record_as_env_var(table_config['env_var'], table_name, args.stage)
