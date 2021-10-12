@@ -1,8 +1,6 @@
 import os
-import uuid
 import json
 import argparse
-
 import boto3
 
 TABLES = {
@@ -73,7 +71,7 @@ def create_table(table_name, hash_key, range_key=None, gsi_partition_key=None):
                 
             }
         ]
-        response = client.update_table(
+        client.update_table(
             AttributeDefinitions=[
                 {
                     'AttributeName': gsi_partition_key,
@@ -100,8 +98,6 @@ def record_as_env_var(key, value, stage):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--stage', default='dev')
-    # app - stores the todo items
-    # users - stores the user data.
     parser.add_argument('-t', '--table-type', default='logs',
                         choices=['logs', 'sessions'],
                         help='Specify which type to create')
