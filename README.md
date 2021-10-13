@@ -2,7 +2,7 @@
 
 ## REST API
 
-Automatically generated Swagger 2.0 models for the API are in [docs/swagger.json](docs/swagger.json)
+Automatically generated [Swagger](https://swagger.io/) 2.0 models for the API are in [docs/swagger.json](docs/swagger.json)
 
 The REST API supports the following resources:
 - GET - `/logs/`: get a list of all interactions
