@@ -9,7 +9,7 @@
       "url": "https://oirhnam7o8.execute-api.us-east-1.amazonaws.com/{basePath}",
       "variables": {
         "basePath": {
-          "default": "/api"
+          "default": "api"
         }
       }
     }
