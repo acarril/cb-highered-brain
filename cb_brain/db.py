@@ -61,6 +61,10 @@ class DynamoDBSessions(ChatBotDB):
                 'session_n': self.get_user(user_id, response_element='Count')+1,
             }
         )
+    
+    def delete_item(self, session_id):
+        self._table.delete_item(Key={'session_id': session_id})
+
 
 
 class DynamoDBLogs(ChatBotDB):
