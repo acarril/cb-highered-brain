@@ -1,4 +1,5 @@
-.chalice/deployments/
-.chalice/venv/
+.chalice/deployments
+.chalice/venv
 __pycache__/
 .vscode/
+vendor
