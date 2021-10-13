@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "icfesbot",
+    "title": "cb-highered-brain",
     "version": "1.0"
   },
   "servers": [
@@ -15,22 +15,9 @@
     }
   ],
   "paths": {
-    "/users": {
+    "/logs": {
       "get": {
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Empty"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
+        "summary": "Get all sessions",
         "responses": {
           "200": {
             "description": "200 response",
@@ -45,8 +32,9 @@
         }
       }
     },
-    "/logs/{user_id}": {
+    "/sessions/user/{user_id}": {
       "get": {
+        "summary": "Get all sessions of `user_id` (requires `user_id` as GSI)",
         "parameters": [
           {
             "name": "user_id",
@@ -70,7 +58,8 @@
           }
         }
       },
-      "put": {
+      "post": {
+        "summary": "Create new session associated to `user_id`",
         "parameters": [
           {
             "name": "user_id",
@@ -93,11 +82,13 @@
             }
           }
         }
-      },
+      }
+    },
+    "/sessions/{session_id}": {
       "delete": {
         "parameters": [
           {
-            "name": "user_id",
+            "name": "session_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -119,8 +110,9 @@
         }
       }
     },
-    "/logs": {
+    "/sessions": {
       "get": {
+        "summary": "Get all sessions",
         "responses": {
           "200": {
             "description": "200 response",
@@ -133,8 +125,21 @@
             }
           }
         }
-      },
+      }
+    },
+    "/logs/{session_id}": {
       "post": {
+        "summary": "Add new session to database",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response",
