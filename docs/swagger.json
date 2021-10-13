@@ -4,7 +4,11 @@
         "version": "1.0",
         "title": "cb-highered-brain"
     },
-    "host": "https://oirhnam7o8.execute-api.us-east-1.amazonaws.com/api",
+    "servers": [
+        {
+            "url": "https://oirhnam7o8.execute-api.us-east-1.amazonaws.com/api"
+        }
+    ],
     "schemes": [
         "https"
     ],
