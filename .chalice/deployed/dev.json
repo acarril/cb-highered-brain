@@ -3,19 +3,19 @@
     {
       "name": "api_handler_role",
       "resource_type": "iam_role",
-      "role_arn": "arn:aws:iam::037742176437:role/icfesbot-dev-api_handler",
-      "role_name": "icfesbot-dev-api_handler"
+      "role_arn": "arn:aws:iam::037742176437:role/cb-highered-brain-dev-api_handler",
+      "role_name": "cb-highered-brain-dev-api_handler"
     },
     {
       "name": "api_handler",
       "resource_type": "lambda_function",
-      "lambda_arn": "arn:aws:lambda:us-east-1:037742176437:function:icfesbot-dev"
+      "lambda_arn": "arn:aws:lambda:us-east-1:037742176437:function:cb-highered-brain-dev"
     },
     {
       "name": "rest_api",
       "resource_type": "rest_api",
-      "rest_api_id": "oirhnam7o8",
-      "rest_api_url": "https://oirhnam7o8.execute-api.us-east-1.amazonaws.com/api/"
+      "rest_api_id": "j0z5xz882m",
+      "rest_api_url": "https://j0z5xz882m.execute-api.us-east-1.amazonaws.com/api/"
     }
   ],
   "schema_version": "2.0",
