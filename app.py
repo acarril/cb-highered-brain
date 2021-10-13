@@ -69,3 +69,7 @@ def add_new_message(session_id):
         session_id=session_id,
         log_label=body.get('log_label')
     )
+
+@app.route('/', methods=['GET'])
+def hello_world():
+    return {'hello': 'world'}
