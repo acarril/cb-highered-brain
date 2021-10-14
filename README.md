@@ -16,6 +16,13 @@ The REST API supports the following resources:
 - DELETE - `/logs/{session_id}`: delete a specific session 
 - PUT - `/logs/{session_id}`: update a specific session
 
+### API Documentation
+
+An OpenAPI file with API documentation is in [`docs/latestswagger.json](docs/latestswagger.json).
+```sh
+aws apigateway get-export --parameters extensions='apigateway' --rest-api-id j0z5xz882m --stage-name api --export-type swagger latestswagger.json
+```
+
 ## DynamoDB
 
 Data generated in the chatbot is stored in two [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) noSQL databases:

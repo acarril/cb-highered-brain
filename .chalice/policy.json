@@ -20,8 +20,7 @@
           "dynamodb:Query"
         ],
         "Resource": [
-          "arn:aws:dynamodb:*:*:table/icfesbot-app-*",
-          "arn:aws:dynamodb:*:*:table/users-app-*"
+          "arn:aws:dynamodb:*:*:table/icfesbot-*"
         ],
         "Effect": "Allow"
       }
