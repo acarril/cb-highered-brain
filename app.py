@@ -70,6 +70,6 @@ def add_new_message(session_id):
         log_label=body.get('log_label')
     )
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET'], content_types=["application/json"], api_key_required=False, cors=True)
 def hello_world():
     return {'hello': 'world'}
