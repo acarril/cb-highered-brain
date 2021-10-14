@@ -27,6 +27,10 @@ def get_logs_db():
         )
     return _LOGS_DB
 
+@app.route('/', methods=['GET'], cors=True)
+def hello_world():
+    '''Good ol' hello world for testing purposes'''
+    return {'hello': 'world'}
 
 # Sessions DB
 
@@ -37,12 +41,12 @@ def route_sessions_get():
 
 @app.route('/sessions/user/{user_id}', methods=['GET'], cors=True)
 def route_sessions_user_get(user_id):
-    '''Get all sessions of `user_id` (requires `user_id` as GSI)'''
+    '''Get all sessions of `user_id`'''
     return get_sessions_db().get_user(user_id=user_id)
 
 @app.route('/sessions/user/{user_id}', methods=['POST'], cors=True)
 def route_sessions_user_post(user_id):
-    '''Create new session associated to `user_id`'''
+    '''Post new session associated to `user_id`'''
     body = app.current_request.json_body
     return get_sessions_db().add_item(
         user_id=user_id,
@@ -51,8 +55,8 @@ def route_sessions_user_post(user_id):
 
 @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
 def route_sessions_delete(session_id):
+    '''Delete session identified by `session_id`'''
     return get_sessions_db().delete_item(session_id=session_id)
-
 
 # Logs DB
 
@@ -69,7 +73,3 @@ def add_new_message(session_id):
         session_id=session_id,
         log_label=body.get('log_label')
     )
-
-@app.route('/', methods=['GET'], cors=True)
-def hello_world():
-    return {'hello': 'world'}
