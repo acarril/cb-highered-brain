@@ -2,26 +2,10 @@
 
 ## REST API
 
-Automatically generated [Swagger](https://swagger.io/) 2.0 models for the API are in [docs/swagger.json](docs/swagger.json)
-
-The REST API supports the following resources:
-- GET - `/logs/`: get a list of all interactions
-- POST - `/logs/`: create a new interaction
-- GET - `/logs/{log_id}`: get a specific interaction
-- DELETE - `/logs/{log_id}`: delete a specific interaction 
-- PUT - `/logs/{log_id}`: update a specific interaction
-- GET - `/sessions`: get a list of all sessions
-- POST - `/sessions`: create a new session
-- GET - `/logs/{session_id}`: get a specific session
-- DELETE - `/logs/{session_id}`: delete a specific session 
-- PUT - `/logs/{session_id}`: update a specific session
-
-### API Documentation
-
-An OpenAPI file with API documentation is in [`docs/latestswagger.json](docs/latestswagger.json).
-```sh
-aws apigateway get-export --parameters extensions='apigateway' --rest-api-id j0z5xz882m --stage-name api --export-type swagger latestswagger.json
-```
+API documentation is available in [Swagger UI](https://swagger.io/tools/swagger-ui/) in the following URL: http://cb-highered-brain-swagger.s3-website-us-east-1.amazonaws.com/
+The static website serving the UI is hosted on the `cb-highered-brain-swagger` S3 Bucket.
+The automatically-generated JSON file with Swagger/OpenAPI models for the API that feed the UI are in [`docs/swagger_dist/docs/api-cb-highered-brain.json`](docs/swagger_dist/docs/api-cb-highered-brain.json).
+A helper script located in [`swagger_update.py`](swagger_update.py) is run periodically to export the JSON file from API Gateway and upload it into the corresponding S3 Bucket.
 
 ## DynamoDB
 
