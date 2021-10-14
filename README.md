@@ -3,6 +3,9 @@
 ## REST API
 
 API documentation is available in [Swagger UI](https://swagger.io/tools/swagger-ui/) in the following URL: http://cb-highered-brain-swagger.s3-website-us-east-1.amazonaws.com/
+
+#### Notes
+
 The static website serving the UI is hosted on the `cb-highered-brain-swagger` S3 Bucket.
 The automatically-generated JSON file with Swagger/OpenAPI models for the API that feed the UI are in [`docs/swagger_dist/docs/api-cb-highered-brain.json`](docs/swagger_dist/docs/api-cb-highered-brain.json).
 A helper script located in [`swagger_update.py`](swagger_update.py) is run periodically to export the JSON file from API Gateway and upload it into the corresponding S3 Bucket.
