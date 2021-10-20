@@ -10,6 +10,7 @@ app = Chalice(app_name='cb-highered-brain')
 app.debug = True
 _SESSIONS_DB = None
 _LOGS_DB = None
+_STUDENTS_DB = None
 
 def get_sessions_db():
     global _SESSIONS_DB
@@ -26,6 +27,22 @@ def get_logs_db():
             boto3.resource('dynamodb').Table(os.environ['LOGS_TABLE_NAME'])
         )
     return _LOGS_DB
+def get_students_db():
+    global _STUDENTS_DB
+    if _STUDENTS_DB is None:
+        _STUDENTS_DB = db.DynamoDBStudents(
+            boto3.resource('dynamodb').Table('icfesbot-estudiantes-2021')
+        )
+    return _STUDENTS_DB
+
+
+def get_students_db():
+    global _STUDENTS_DB
+    if _STUDENTS_DB is None:
+        _STUDENTS_DB = db.DynamoDBStudents(
+            boto3.resource('dynamodb').Table('icfesbot-estudiantes-2021')
+        )
+    return _STUDENTS_DB
 
 @app.route('/', methods=['GET'], cors=True)
 def hello_world():
