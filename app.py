@@ -27,14 +27,6 @@ def get_logs_db():
             boto3.resource('dynamodb').Table(os.environ['LOGS_TABLE_NAME'])
         )
     return _LOGS_DB
-def get_students_db():
-    global _STUDENTS_DB
-    if _STUDENTS_DB is None:
-        _STUDENTS_DB = db.DynamoDBStudents(
-            boto3.resource('dynamodb').Table('icfesbot-estudiantes-2021')
-        )
-    return _STUDENTS_DB
-
 
 def get_students_db():
     global _STUDENTS_DB
@@ -74,6 +66,20 @@ def route_sessions_user_post(user_id):
 def route_sessions_delete(session_id):
     '''Delete session identified by `session_id`'''
     return get_sessions_db().delete_item(session_id=session_id)
+
+
+# Messages DB
+
+@app.route('/message', methods=['GET'], cors=True)
+def get_message():
+    '''Get message from backend'''
+    web_id = app.current_request.query_params.get('web_id')
+    session_id = app.current_request.query_params.get('session_id')
+    message_id = app.current_request.query_params.get('message_id')
+    # return {'webID': web_id}
+    response = get_students_db().get_item(web_id)
+    message = response.pop()
+    return message
 
 # Logs DB
 
