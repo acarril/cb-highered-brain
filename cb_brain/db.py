@@ -80,6 +80,12 @@ class DynamoDBLogs(ChatBotDB):
             }
         )
 
+class DynamoDBStudents(ChatBotDB):
+    def get_item(self, web_id):
+        response = self._table.query(KeyConditionExpression=Key('web_id').eq(web_id))
+        return response['Items']
+
+
 # class DynamoDBUsers(ChatBotDB):
 #     def add_item(self, hash_key, session_id, session_time, user_type=None):
 #         self._table.put_item(
