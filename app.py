@@ -41,6 +41,14 @@ def hello_world():
     '''Good ol' hello world for testing purposes'''
     return {'hello': 'world'}
 
+# Students DB
+
+@app.route('/student/{student_id}', methods=['GET'], cors=True)
+def route_student_get(student_id):
+    '''Get student information'''
+    response =  get_students_db().get_item(student_id).pop()
+    return response
+
 # Sessions DB
 
 @app.route('/sessions', methods=['GET'], cors=True)
