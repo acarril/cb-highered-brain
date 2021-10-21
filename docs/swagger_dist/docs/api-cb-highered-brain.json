@@ -66,6 +66,21 @@
         }
       }
     },
+    "/message": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
     "/sessions": {
       "get": {
         "summary": "Get all sessions",
