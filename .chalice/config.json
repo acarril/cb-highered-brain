@@ -8,7 +8,8 @@
       "autogen_policy": false,
       "environment_variables": {
         "SESSIONS_TABLE_NAME": "icfesbot-sessions-2021",
-        "LOGS_TABLE_NAME": "icfesbot-logs-2021"
+        "LOGS_TABLE_NAME": "icfesbot-logs-2021",
+        "STUDENTS_TABLE_NAME": "icfesbot-students-2021"
       }
     }
   }
