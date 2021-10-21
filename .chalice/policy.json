@@ -17,7 +17,8 @@
           "dynamodb:UpdateItem",
           "dynamodb:GetItem",
           "dynamodb:Scan",
-          "dynamodb:Query"
+          "dynamodb:Query",
+          "dynamodb:DescribeTable"
         ],
         "Resource": [
           "arn:aws:dynamodb:*:*:table/icfesbot-*"
