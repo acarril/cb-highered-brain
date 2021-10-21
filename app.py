@@ -32,21 +32,23 @@ def get_students_db():
     global _STUDENTS_DB
     if _STUDENTS_DB is None:
         _STUDENTS_DB = db.DynamoDBStudents(
-            boto3.resource('dynamodb').Table('icfesbot-estudiantes-2021')
+            boto3.resource('dynamodb').Table(os.environ['STUDENTS_TABLE_NAME'])
         )
     return _STUDENTS_DB
 
+### Routes
+
 @app.route('/', methods=['GET'], cors=True)
 def hello_world():
-    '''Good ol' hello world for testing purposes'''
+    '''Good ol' 'hello world' for testing purposes'''
     return {'hello': 'world'}
 
 # Students DB
 
-@app.route('/student/{student_id}', methods=['GET'], cors=True)
-def route_student_get(student_id):
-    '''Get student information'''
-    response =  get_students_db().get_item(student_id).pop()
+@app.route('/students/{web_id}', methods=['GET'], cors=True)
+def route_student_get(web_id):
+    '''Get student informatweb_idion'''
+    response = get_students_db().get_item(web_id).pop()
     return response
 
 # Sessions DB

@@ -26,7 +26,9 @@ class ChatBotDB(object):
         pass
 
     def get_item(self, partition_key_value, sort_key_value=None):
-        response = self._table.query(KeyConditionExpression=Key(self._table.partition_key).eq(partition_key_value))
+        response = self._table.query(
+            KeyConditionExpression=Key(self._table.partition_key).eq(partition_key_value)
+        )
         return response['Items']
 
     def delete_item(self, primary_key, secondary_key=None, filter=None):
