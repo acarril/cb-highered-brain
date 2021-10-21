@@ -9,6 +9,7 @@ class ChatBotDB(object):
     '''Class for DynamoDB database of users'''
     def __init__(self, table_resource):
         self._table = table_resource
+        self._table.partition_key = self._table.key_schema.pop()['AttributeName']
 
     def list_all_items(self):
         '''List all items of table'''
@@ -24,8 +25,9 @@ class ChatBotDB(object):
     def add_item(self):
         pass
 
-    def get_item(self, user_id, sort_key=None):
-        pass
+    def get_item(self, partition_key_value, sort_key_value=None):
+        response = self._table.query(KeyConditionExpression=Key(self._table.partition_key).eq(partition_key_value))
+        return response['Items']
 
     def delete_item(self, primary_key, secondary_key=None, filter=None):
         # return [list(primary_key.keys())[0], list(primary_key.values())[0]]
@@ -81,9 +83,10 @@ class DynamoDBLogs(ChatBotDB):
         )
 
 class DynamoDBStudents(ChatBotDB):
-    def get_item(self, web_id):
-        response = self._table.query(KeyConditionExpression=Key('web_id').eq(web_id))
-        return response['Items']
+    pass
+    # def get_item(self, web_id):
+    #     response = self._table.query(KeyConditionExpression=Key('web_id').eq(web_id))
+    #     return response['Items']
 
 
 # class DynamoDBUsers(ChatBotDB):
