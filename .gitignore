@@ -1,5 +1,12 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Local environment
+.vscode/
+
+# Distribution / packaging
 .chalice/deployments
 .chalice/venv
-__pycache__/
-.vscode/
-vendor
+vendor/
+build/
+*.egg-info/
