@@ -47,62 +47,66 @@ def hello_world():
 
 @app.route('/students/{web_id}', methods=['GET'], cors=True)
 def route_student_get(web_id):
-    '''Get student informatweb_idion'''
+    '''Get student information'''
+    params = app.current_request.query_params
     response = get_students_db().get_item(web_id).pop()
-    return response
+    if params is None:
+        return response
+    else:
+        return {k: response[k] for k in [*params]}
 
-# Sessions DB
+# # Sessions DB
 
-@app.route('/sessions', methods=['GET'], cors=True)
-def route_sessions_get():
-    '''Get all sessions'''
-    return get_sessions_db().list_all_items()
+# @app.route('/sessions', methods=['GET'], cors=True)
+# def route_sessions_get():
+#     '''Get all sessions'''
+#     return get_sessions_db().list_all_items()
 
-@app.route('/sessions/user/{user_id}', methods=['GET'], cors=True)
-def route_sessions_user_get(user_id):
-    '''Get all sessions of `user_id`'''
-    return get_sessions_db().get_user(user_id=user_id)
+# @app.route('/sessions/user/{user_id}', methods=['GET'], cors=True)
+# def route_sessions_user_get(user_id):
+#     '''Get all sessions of `user_id`'''
+#     return get_sessions_db().get_user(user_id=user_id)
 
-@app.route('/sessions/user/{user_id}', methods=['POST'], cors=True)
-def route_sessions_user_post(user_id):
-    '''Post new session associated to `user_id`'''
-    body = app.current_request.json_body
-    return get_sessions_db().add_item(
-        user_id=user_id,
-        session_time=body.get('session_time') if body is not None else None
-    )
+# @app.route('/sessions/user/{user_id}', methods=['POST'], cors=True)
+# def route_sessions_user_post(user_id):
+#     '''Post new session associated to `user_id`'''
+#     body = app.current_request.json_body
+#     return get_sessions_db().add_item(
+#         user_id=user_id,
+#         session_time=body.get('session_time') if body is not None else None
+#     )
 
-@app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
-def route_sessions_delete(session_id):
-    '''Delete session identified by `session_id`'''
-    return get_sessions_db().delete_item(session_id=session_id)
+# @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
+# def route_sessions_delete(session_id):
+#     '''Delete session identified by `session_id`'''
+#     return get_sessions_db().delete_item(session_id=session_id)
 
 
-# Messages DB
+# # Messages DB
 
-@app.route('/message', methods=['GET'], cors=True)
-def get_message():
-    '''Get message from backend'''
-    web_id = app.current_request.query_params.get('web_id')
-    session_id = app.current_request.query_params.get('session_id')
-    message_id = app.current_request.query_params.get('message_id')
-    # return {'webID': web_id}
-    response = get_students_db().get_item(web_id)
-    message = response.pop()
-    return message
+# @app.route('/message', methods=['GET'], cors=True)
+# def get_message():
+#     '''Get message from backend'''
+#     web_id = app.current_request.query_params.get('web_id')
+#     session_id = app.current_request.query_params.get('session_id')
+#     message_id = app.current_request.query_params.get('message_id')
+#     # return {'webID': web_id}
+#     response = get_students_db().get_item(web_id)
+#     message = response.pop()
+#     return message
 
-# Logs DB
+# # Logs DB
 
-@app.route('/logs', methods=['GET'], cors=True)
-def get_logs():
-    '''Get all sessions'''
-    return get_logs_db().list_all_items()
+# @app.route('/logs', methods=['GET'], cors=True)
+# def get_logs():
+#     '''Get all sessions'''
+#     return get_logs_db().list_all_items()
 
-@app.route('/logs/{session_id}', methods=['POST'], cors=True)
-def add_new_message(session_id):
-    '''Add new session to database'''
-    body = app.current_request.json_body
-    return get_logs_db().add_item(
-        session_id=session_id,
-        log_label=body.get('log_label')
-    )
+# @app.route('/logs/{session_id}', methods=['POST'], cors=True)
+# def add_new_message(session_id):
+#     '''Add new session to database'''
+#     body = app.current_request.json_body
+#     return get_logs_db().add_item(
+#         session_id=session_id,
+#         log_label=body.get('log_label')
+#     )
