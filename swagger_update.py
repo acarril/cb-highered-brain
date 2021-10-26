@@ -1,5 +1,6 @@
 import subprocess
 import argparse
+import copy
 import boto3
 import json
 from collections.abc import MutableMapping
@@ -31,17 +32,42 @@ def delete_keys_from_dict(dictionary, keys):
                 modified_dict[key] = value
     return modified_dict
 
+def add_query_params(dictionary, path, params, method='get'):
+    def add_query_param(param, modified_dict, path=path, method=method):
+        modified_dict['paths'][path][method]['parameters'].append(
+            {
+                "name": param,
+                "in": "query",
+                "required": False,
+                "allowEmptyValue": True,
+                "type": "string"
+            }
+        )
+    
+    modified_dict = copy.deepcopy(dictionary)
+    for param in params:
+        add_query_param(param, modified_dict=modified_dict)
+    return modified_dict
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--rest-api-id', default=REST_API_ID)
     parser.add_argument('--no-options', action='store_true')
+    parser.add_argument('--local', action='store_true')
     args = parser.parse_args()
     json_content = json.load(export_api(id=args.rest_api_id))
     if args.no_options:
         json_content = delete_keys_from_dict(json_content, ['options'])
+    json_content = add_query_params(json_content, '/students/{web_id}', params=['primernombre', 'segundonombre'])
     with open('docs/swagger_dist/docs/api-cb-highered-brain.json', 'w') as file:
         json.dump(json_content, file, indent=2)
-    sync_swagger_s3()
+    if not args.local:
+        sync_swagger_s3()
 
 if __name__ == '__main__':
     main()
+
+
+# json_content = json.load(export_api(id=REST_API_ID))
+# x = add_query_params(json_content, '/students/{web_id}', params=['primernombre', 'lala'])
