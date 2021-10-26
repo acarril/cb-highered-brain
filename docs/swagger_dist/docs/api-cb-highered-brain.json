@@ -26,132 +26,14 @@
         }
       }
     },
-    "/logs": {
+    "/students/{web_id}": {
       "get": {
-        "summary": "Get all sessions",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/logs/{session_id}": {
-      "post": {
-        "summary": "Add new session to database",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "session_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/message": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/sessions": {
-      "get": {
-        "summary": "Get all sessions",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/sessions/user/{user_id}": {
-      "get": {
-        "summary": "Get all sessions of `user_id`",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Post new session associated to `user_id`",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/sessions/{session_id}": {
-      "delete": {
-        "summary": "Delete session identified by `session_id`",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "session_id",
+            "name": "web_id",
             "in": "path",
             "required": true,
             "type": "string"
