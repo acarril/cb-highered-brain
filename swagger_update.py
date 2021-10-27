@@ -3,9 +3,12 @@ import argparse
 import copy
 import boto3
 import json
+import pandas as pd
 from collections.abc import MutableMapping
 
 REST_API_ID = 'j0z5xz882m'
+
+params = pd.read_csv('s3://cb-colombia/estudiantes_2021.csv', index_col=0, nrows=0).columns.tolist()
 
 def export_api(id=REST_API_ID):
     client = boto3.client('apigateway')
@@ -59,7 +62,7 @@ def main():
     json_content = json.load(export_api(id=args.rest_api_id))
     if args.no_options:
         json_content = delete_keys_from_dict(json_content, ['options'])
-    json_content = add_query_params(json_content, '/students/{web_id}', params=['primernombre', 'segundonombre'])
+    json_content = add_query_params(json_content, '/students/{web_id}', params=params)
     with open('docs/swagger_dist/docs/api-cb-highered-brain.json', 'w') as file:
         json.dump(json_content, file, indent=2)
     if not args.local:
@@ -67,7 +70,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# json_content = json.load(export_api(id=REST_API_ID))
-# x = add_query_params(json_content, '/students/{web_id}', params=['primernombre', 'lala'])
