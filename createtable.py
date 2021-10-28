@@ -48,10 +48,7 @@ def create_table(table_name, hash_key, range_key=None, gsi_partition_key=None):
         TableName=table_name,
         KeySchema=key_schema,
         AttributeDefinitions=attribute_definitions,
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5,
-        }
+        BillingMode='PAY_PER_REQUEST'
     )
     waiter = client.get_waiter('table_exists')
     waiter.wait(TableName=table_name, WaiterConfig={'Delay': 1})
@@ -70,8 +67,8 @@ def create_table(table_name, hash_key, range_key=None, gsi_partition_key=None):
                         'ProjectionType': 'ALL'
                     },
                     'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 5,
-                        'WriteCapacityUnits': 5
+                        'ReadCapacityUnits': 123,
+                        'WriteCapacityUnits': 123
                     }
                 }
                 
