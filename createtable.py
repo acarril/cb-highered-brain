@@ -4,18 +4,18 @@ import argparse
 import boto3
 
 TABLES = {
-    'sessions': {
+    'degrees': {
         'prefix': 'icfesbot',
         'suffix': '2021',
-        'env_var': 'SESSIONS_TABLE_NAME',
-        'hash_key': 'session_id',
-        'gsi_partition_key': 'user_id'
+        'env_var': 'DEGREES_TABLE_NAME',
+        'hash_key': 'degree_id'
+        # 'gsi_partition_key': 'user_id'
     },
-    'logs': {
+    'credits': {
         'prefix': 'icfesbot',
         'suffix': '2021',
-        'env_var': 'LOGS_TABLE_NAME',
-        'hash_key': 'log_id'
+        'env_var': 'CREDITS_TABLE_NAME',
+        'hash_key': 'credit_id'
     },
     'students': {
         'prefix': 'icfesbot',
@@ -104,8 +104,8 @@ def record_as_env_var(key, value, stage):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--stage', default='dev')
-    parser.add_argument('-t', '--table-type', default='logs',
-                        choices=['logs', 'sessions', 'students'],
+    parser.add_argument('-t', '--table-type', default='students',
+                        choices=['credits', 'degrees', 'students'],
                         help='Specify which type to create')
     args = parser.parse_args()
     table_config = TABLES[args.table_type]

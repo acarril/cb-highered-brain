@@ -9,7 +9,9 @@
       "environment_variables": {
         "SESSIONS_TABLE_NAME": "icfesbot-sessions-2021",
         "LOGS_TABLE_NAME": "icfesbot-logs-2021",
-        "STUDENTS_TABLE_NAME": "icfesbot-students-2021"
+        "STUDENTS_TABLE_NAME": "icfesbot-students-2021",
+        "CREDITS_TABLE_NAME": "icfesbot-credits-2021",
+        "DEGREES_TABLE_NAME": "icfesbot-degrees-2021"
       }
     }
   }
