@@ -22,6 +22,12 @@ TABLES = {
         'suffix': '2021',
         'env_var': 'STUDENTS_TABLE_NAME',
         'hash_key': 'web_id'
+    },
+    'sessions': {
+        'prefix': 'icfesbot',
+        'suffix': '2021',
+        'env_var': 'SESSIONS_TABLE_NAME',
+        'hash_key': 'session_id'
     }
 }
 
@@ -102,7 +108,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--stage', default='dev')
     parser.add_argument('-t', '--table-type', default='students',
-                        choices=['credits', 'degrees', 'students'],
+                        choices=['credits', 'degrees', 'students', 'sessions'],
                         help='Specify which type to create')
     args = parser.parse_args()
     table_config = TABLES[args.table_type]
