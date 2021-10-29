@@ -12,7 +12,22 @@ A helper script located in [`swagger_update.py`](swagger_update.py) is run perio
 
 ## DynamoDB
 
-Data generated in the chatbot is stored in two [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) noSQL databases:
+All the data related to the chatbot is stored in [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) noSQL databases.
+Baseline, "static" data includes information on students' characteristics (e.g. gender), degrees' characteristics (e.g. price), and credit options' characteristics (e.g. interest rate).
+Student data is augmented by information collected during the interaction session, and is stored in the `sessions` table.
+
+- `*-students-*`
+  - Partition key: `web_id` (String)
+  - Sort key: NA
+  - GSI: NA
+- `*-degrees-*`
+  - Partition key: `option_id` (String)
+  - Sort key: NA
+  - GSI: NA
+- `*-credits-*`
+  - Partition key: `credit_id` (String)
+  - Sort key: NA
+  - GSI: NA
 - `*-sessions-*`
   - Partition key: `session_id` (String)
   - Sort key: NA
@@ -20,10 +35,7 @@ Data generated in the chatbot is stored in two [DynamoDB](https://docs.aws.amazo
     - Name: `user_id-index`
     - Partition key: `user_id`
     - Sort key: NA
-- `*-users-*`
-  - Partition key: `log_id` (String)
-  - Sort key: NA
-  - GSI: NA
+
 
 #### Note on efficient partitioning of user-sessions
 
