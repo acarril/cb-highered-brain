@@ -65,23 +65,22 @@ def route_sessions_get():
 @app.route('/sessions/{session_id}', methods=['GET'], cors=True)
 def route_sessions_get(session_id):
     '''Get all sessions'''
-    # params = app.current_request.query_params
     response = get_sessions_db().get_item(session_id).pop()
     return response
 
-@app.route('/sessions/user/{user_id}', methods=['GET'], cors=True)
-def route_sessions_user_get(user_id):
+@app.route('/sessions/user/{web_id}', methods=['GET'], cors=True)
+def route_sessions_user_get(web_id):
     '''Get all sessions of `user_id`'''
-    return get_sessions_db().get_user(user_id=user_id)
+    return get_sessions_db().get_user(user_id=web_id)
 
-# @app.route('/sessions/user/{user_id}', methods=['POST'], cors=True)
-# def route_sessions_user_post(user_id):
-#     '''Post new session associated to `user_id`'''
-#     body = app.current_request.json_body
-#     return get_sessions_db().add_item(
-#         user_id=user_id,
-#         session_time=body.get('session_time') if body is not None else None
-#     )
+@app.route('/sessions/user/{web_id}', methods=['POST'], cors=True)
+def route_sessions_user_post(web_id):
+    '''Create new session associated to `web_id`'''
+    body = app.current_request.json_body
+    return get_sessions_db().add_item(
+        user_id=web_id,
+        session_time=body.get('session_time') if body is not None else None
+    )
 
 # @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
 # def route_sessions_delete(session_id):
