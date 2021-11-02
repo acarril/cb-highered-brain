@@ -25,6 +25,39 @@ class ChatBotDB(object):
     def add_item(self):
         pass
 
+    def put_attributes(self, partition_key_value, sort_key_value=None, attrs_dict=None):
+        """Put dict of attributes into DDB table"""
+        # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.html
+        # https://stackoverflow.com/questions/34447304/example-of-update-item-in-dynamodb-boto3
+        def build_update_expression(attrs_dict):
+            """Given a dictionary we generate an update expression and a dict of values
+            to update a dynamodb table.
+
+            Params:
+                attrs_dict (dict): Parameters to use for formatting.
+
+            Returns:
+                update expression, dict of values.
+            """
+            update_expression = ["set "]
+            update_values = {}
+            for key, val in attrs_dict.items():
+                update_expression.append(f" {key} = :{key},")
+                update_values[f":{key}"] = val
+            return "".join(update_expression)[:-1], update_values
+
+        key_name = self._table.partition_key
+        update_expression, update_values = build_update_expression(attrs_dict)
+        response = self._table.update_item(
+            Key={
+                key_name: partition_key_value
+            },
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=update_values,
+            ReturnValues="UPDATED_NEW"
+        )
+        return response
+
     def get_item(self, partition_key_value, sort_key_value=None):
         response = self._table.query(
             KeyConditionExpression=Key(self._table.partition_key).eq(partition_key_value)
