@@ -9,7 +9,6 @@ TABLES = {
         'suffix': '2021',
         'env_var': 'DEGREES_TABLE_NAME',
         'hash_key': 'degree_id'
-        # 'gsi_partition_key': 'user_id'
     },
     'credits': {
         'prefix': 'icfesbot',
