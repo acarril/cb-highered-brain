@@ -26,6 +26,69 @@
         }
       }
     },
+    "/sessions": {
+      "get": {
+        "summary": "Get all sessions",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/sessions/user/{user_id}": {
+      "get": {
+        "summary": "Get all sessions of `user_id`",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{session_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
     "/students/{web_id}": {
       "get": {
         "produces": [
@@ -36,27 +99,6 @@
             "name": "web_id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "allowEmptyValue": true,
-            "type": "string"
-          },
-          {
-            "name": "primernombre",
-            "in": "query",
-            "required": false,
-            "allowEmptyValue": true,
-            "type": "string"
-          },
-          {
-            "name": "segundonombre",
-            "in": "query",
-            "required": false,
-            "allowEmptyValue": true,
             "type": "string"
           },
           {
@@ -144,7 +186,56 @@
             "type": "string"
           },
           {
-            "name": "discapacidades",
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "sector",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "zona",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "web_id",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "tratamiento",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "percentil",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "msj_percentil",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "nombre",
             "in": "query",
             "required": false,
             "allowEmptyValue": true,
