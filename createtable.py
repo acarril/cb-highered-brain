@@ -27,7 +27,8 @@ TABLES = {
         'prefix': 'icfesbot',
         'suffix': '2021',
         'env_var': 'SESSIONS_TABLE_NAME',
-        'hash_key': 'session_id'
+        'hash_key': 'session_id',
+        'gsi_partition_key': 'web_id'
     }
 }
 
@@ -71,10 +72,6 @@ def create_table(table_name, hash_key, range_key=None, gsi_partition_key=None):
                     ],
                     'Projection': {
                         'ProjectionType': 'ALL'
-                    },
-                    'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 123,
-                        'WriteCapacityUnits': 123
                     }
                 }
                 
