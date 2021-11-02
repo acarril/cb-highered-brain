@@ -56,8 +56,8 @@ class DynamoDBSessions(ChatBotDB):
     def add_item(self, user_id, session_time, session_id=None):
         self._table.put_item(
             Item={
-                'session_id': session_id if session_id is not None else str(uuid4()),
-                'user_id': user_id,
+                'session_id': session_id if session_id is not None else str(uuid4().hex),
+                'web_id': user_id,
                 'session_time': session_time if session_time is not None else datetime.now(timezone.utc).isoformat(),
                 'session_n': self.get_user(user_id, response_element='Count')+1,
             }
