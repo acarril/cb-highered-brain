@@ -45,14 +45,11 @@ class ChatBotDB(object):
 
 
 class DynamoDBSessions(ChatBotDB):
-    def get_item(self):
-        pass
-
     def get_user(self, user_id, response_element=None):
         response_element = response_element if response_element is not None else 'Items'
         response = self._table.query(
-            IndexName='user_id-index',
-            KeyConditionExpression=Key('user_id').eq(user_id)
+            IndexName='web_id-index',
+            KeyConditionExpression=Key('web_id').eq(user_id)
         )
         return response[response_element]
 
