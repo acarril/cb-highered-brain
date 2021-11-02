@@ -24,33 +24,6 @@
             }
           }
         }
-      },
-      "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
       }
     },
     "/sessions": {
@@ -67,44 +40,16 @@
             }
           }
         }
-      },
-      "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
       }
     },
-    "/sessions/user/{user_id}": {
+    "/sessions/user/{web_id}": {
       "get": {
-        "summary": "Get all sessions of `user_id`",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "user_id",
+            "name": "web_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -119,16 +64,13 @@
           }
         }
       },
-      "options": {
-        "consumes": [
-          "application/json"
-        ],
+      "post": {
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "user_id",
+            "name": "web_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -139,17 +81,6 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/Empty"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
             }
           }
         }
@@ -177,10 +108,7 @@
           }
         }
       },
-      "options": {
-        "consumes": [
-          "application/json"
-        ],
+      "put": {
         "produces": [
           "application/json"
         ],
@@ -197,17 +125,6 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/Empty"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
             }
           }
         }
@@ -371,41 +288,6 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      },
-      "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "web_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            },
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
             }
           }
         }

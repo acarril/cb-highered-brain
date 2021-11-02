@@ -1,7 +1,7 @@
 from botocore.session import get_session
 from chalice import Chalice
 from cb_brain import db
-from chalice import NotFoundError
+from chalice import NotFoundError, BadRequestError
 
 import os
 import boto3
@@ -81,6 +81,17 @@ def route_sessions_user_post(web_id):
         user_id=web_id,
         session_time=body.get('session_time') if body is not None else None
     )
+
+@app.route('/sessions/{session_id}', methods=['PUT'], cors=True)
+def route_sessions_put(session_id):
+    body = app.current_request.json_body
+    try:
+        return get_sessions_db().put_attributes(
+            partition_key_value=session_id,
+            attrs_dict=body
+        )
+    except AttributeError:
+        raise BadRequestError("You have to pass a JSON dict of attributes to PUT")
 
 # @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
 # def route_sessions_delete(session_id):
