@@ -49,7 +49,10 @@ def hello_world():
 def route_student_get(web_id):
     '''Get student information'''
     params = app.current_request.query_params
-    response = get_students_db().get_item(web_id).pop()
+    try:
+        response = get_students_db().get_item(web_id).pop()
+    except IndexError:
+        raise NotFoundError(f"web_id={web_id} not found")
     if params is None:
         return response
     else:
@@ -65,7 +68,10 @@ def route_sessions_get():
 @app.route('/sessions/{session_id}', methods=['GET'], cors=True)
 def route_sessions_get(session_id):
     '''Get all sessions'''
-    response = get_sessions_db().get_item(session_id).pop()
+    try:
+        response = get_sessions_db().get_item(session_id).pop()
+    except IndexError:
+        raise NotFoundError(f"session_id={session_id} not found")
     return response
 
 @app.route('/sessions/user/{web_id}', methods=['GET'], cors=True)
