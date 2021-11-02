@@ -55,17 +55,24 @@ def route_student_get(web_id):
     else:
         return {k: response[k] for k in [*params]}
 
-# # Sessions DB
+# Sessions DB
 
-# @app.route('/sessions', methods=['GET'], cors=True)
-# def route_sessions_get():
-#     '''Get all sessions'''
-#     return get_sessions_db().list_all_items()
+@app.route('/sessions', methods=['GET'], cors=True)
+def route_sessions_get():
+    '''Get all sessions'''
+    return get_sessions_db().list_all_items()
 
-# @app.route('/sessions/user/{user_id}', methods=['GET'], cors=True)
-# def route_sessions_user_get(user_id):
-#     '''Get all sessions of `user_id`'''
-#     return get_sessions_db().get_user(user_id=user_id)
+@app.route('/sessions/{session_id}', methods=['GET'], cors=True)
+def route_sessions_get(session_id):
+    '''Get all sessions'''
+    # params = app.current_request.query_params
+    response = get_sessions_db().get_item(session_id).pop()
+    return response
+
+@app.route('/sessions/user/{user_id}', methods=['GET'], cors=True)
+def route_sessions_user_get(user_id):
+    '''Get all sessions of `user_id`'''
+    return get_sessions_db().get_user(user_id=user_id)
 
 # @app.route('/sessions/user/{user_id}', methods=['POST'], cors=True)
 # def route_sessions_user_post(user_id):
