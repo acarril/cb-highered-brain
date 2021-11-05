@@ -104,6 +104,30 @@ def route_sessions_put(session_id):
 #     '''Delete session identified by `session_id`'''
 #     return get_sessions_db().delete_item(session_id=session_id)
 
+# Credit Check
+
+@app.route('/credits/{web_id}', methods=['GET'], cors=True)
+def route_credits_get(web_id):
+    response = [
+            {
+                'id_credito': 1,
+                'nombre_linea': 'Mi credito 1',
+                'tasa_interes': '9% + IPC',
+                'pct_durante': '40%',
+                'pct_post': '60%',
+                'plazo': 'Doble del período de estudios financiado'
+            },
+            {
+                'id_credito': 2,
+                'nombre_linea': 'Mi credito 2',
+                'tasa_interes': '10% + IPC',
+                'pct_durante': '50%',
+                'pct_post': '50%',
+                'plazo': 'Doble del período de estudios financiado'
+            }
+        ]
+    return response
+
 
 # # Messages DB
 
