@@ -100,6 +100,11 @@ def route_sessions_put(session_id):
     except AttributeError:
         raise BadRequestError("You have to pass a JSON dict of attributes to PUT")
 
+@app.route('/sessions/{session_id}/nem', methods=['POST'], cors=True)
+def route_sessions_grades(session_id):
+    body = app.current_request.json_body
+    return
+
 # @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
 # def route_sessions_delete(session_id):
 #     '''Delete session identified by `session_id`'''
