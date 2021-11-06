@@ -83,10 +83,11 @@ def route_sessions_user_get(web_id):
 def route_sessions_user_post(web_id):
     '''Create new session associated to `web_id`'''
     body = app.current_request.json_body
-    return get_sessions_db().add_item(
+    response = get_sessions_db().add_item(
         user_id=web_id,
         session_time=body.get('session_time') if body is not None else None
     )
+    return response
 
 @app.route('/sessions/{session_id}', methods=['PUT'], cors=True)
 def route_sessions_put(session_id):
