@@ -14,7 +14,7 @@ TABLES = {
         'prefix': 'icfesbot',
         'suffix': '2021',
         'env_var': 'CREDITS_TABLE_NAME',
-        'hash_key': 'credit_id'
+        'hash_key': 'id_credito'
     },
     'students': {
         'prefix': 'icfesbot',
