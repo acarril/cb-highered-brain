@@ -1,6 +1,8 @@
 from botocore.session import get_session
 from chalice import Chalice
 from cb_brain import db
+from cb_brain import creditos
+from cb_brain.creditos import gen_oferta_creditos
 from chalice import NotFoundError, BadRequestError
 
 import os
@@ -67,7 +69,7 @@ def route_sessions_get():
 
 @app.route('/sessions/{session_id}', methods=['GET'], cors=True)
 def route_sessions_get(session_id):
-    '''Get all sessions'''
+    '''Get specific session'''
     try:
         response = get_sessions_db().get_item(session_id).pop()
     except IndexError:
@@ -112,7 +114,7 @@ def route_sessions_grades(session_id):
 
 # Credit Check
 
-@app.route('/credits/{web_id}', methods=['GET'], cors=True)
+@app.route('/credits/dummy/{web_id}', methods=['GET'], cors=True)
 def route_credits_get(web_id):
     response = [
             {
@@ -134,6 +136,21 @@ def route_credits_get(web_id):
         ]
     return response
 
+@app.route('/credits/{session_id}', methods=['POST'], cors=True)
+def route_credits_get(session_id):
+    session_info = get_sessions_db().get_item(session_id).pop() # d0fda7d82cf741ae812a8f303f105b69
+    web_id = session_info.get('web_id')
+    student_info = get_students_db().get_item(web_id).pop()
+    nota_string = app.current_request.json_body.get('credito_pregunta_notas')
+    nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
+    credit_list = gen_oferta_creditos(
+        estrato=int(student_info.get('estrato')),
+        sisben_bajoC8=int(student_info.get('sisben_bajoC8')),
+        nota=nota_int,
+        saber11=300,
+        indigena=bool(int(student_info.get('indigena')))
+    )
+    return credit_list
 
 # # Messages DB
 

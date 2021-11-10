@@ -26,7 +26,7 @@
         }
       }
     },
-    "/credits/{web_id}": {
+    "/credits/dummy/{web_id}": {
       "get": {
         "produces": [
           "application/json"
@@ -34,6 +34,29 @@
         "parameters": [
           {
             "name": "web_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/credits/{session_id}": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -132,6 +155,29 @@
         }
       },
       "put": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{session_id}/nem": {
+      "post": {
         "produces": [
           "application/json"
         ],
@@ -285,7 +331,7 @@
             "type": "string"
           },
           {
-            "name": "percentil",
+            "name": "whatsapp",
             "in": "query",
             "required": false,
             "allowEmptyValue": true,
@@ -299,7 +345,42 @@
             "type": "string"
           },
           {
+            "name": "percentil",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
             "name": "nombre",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "estrato",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "sisben_bajoC8",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": true,
+            "type": "string"
+          },
+          {
+            "name": "indigena",
             "in": "query",
             "required": false,
             "allowEmptyValue": true,
