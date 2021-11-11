@@ -13,6 +13,7 @@ app.debug = True
 _SESSIONS_DB = None
 _LOGS_DB = None
 _STUDENTS_DB = None
+_CREDITS_DB = None
 
 def get_sessions_db():
     global _SESSIONS_DB
@@ -37,6 +38,14 @@ def get_students_db():
             boto3.resource('dynamodb').Table(os.environ['STUDENTS_TABLE_NAME'])
         )
     return _STUDENTS_DB
+
+def get_credits_db():
+    global _CREDITS_DB
+    if _CREDITS_DB is None:
+        _CREDITS_DB = db.DynamoDBStudents(
+            boto3.resource('dynamodb').Table(os.environ['CREDITS_TABLE_NAME'])
+        )
+    return _CREDITS_DB
 
 ### Routes
 
@@ -143,14 +152,14 @@ def route_credits_get(session_id):
     student_info = get_students_db().get_item(web_id).pop()
     nota_string = app.current_request.json_body.get('credito_pregunta_notas')
     nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
-    credit_list = gen_oferta_creditos(
+    credit_id_list = gen_oferta_creditos(
         estrato=int(student_info.get('estrato')),
         sisben_bajoC8=int(student_info.get('sisben_bajoC8')),
         nota=nota_int,
         saber11=300,
         indigena=bool(int(student_info.get('indigena')))
     )
-    return credit_list
+    return get_credits_db().list_all_items()
 
 # # Messages DB
 
