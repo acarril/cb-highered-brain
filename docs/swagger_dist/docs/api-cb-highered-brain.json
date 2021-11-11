@@ -12,9 +12,47 @@
   "paths": {
     "/": {
       "get": {
-        "summary": "Good ol' hello world for testing purposes",
+        "summary": "Good ol' 'hello world' for testing purposes",
         "produces": [
           "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/credits/creencia_pago_mensual": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/credits/creencia_pago_mensual/{session_id}": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
@@ -90,6 +128,7 @@
     },
     "/sessions/user/{web_id}": {
       "get": {
+        "summary": "Get all sessions of `user_id`",
         "produces": [
           "application/json"
         ],
@@ -111,6 +150,7 @@
         }
       },
       "post": {
+        "summary": "Create new session associated to `web_id`",
         "produces": [
           "application/json"
         ],
@@ -134,6 +174,7 @@
     },
     "/sessions/{session_id}": {
       "get": {
+        "summary": "Get specific session",
         "produces": [
           "application/json"
         ],
@@ -201,6 +242,7 @@
     },
     "/students/{web_id}": {
       "get": {
+        "summary": "Get student information",
         "produces": [
           "application/json"
         ],

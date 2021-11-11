@@ -116,6 +116,13 @@ class DynamoDBLogs(ChatBotDB):
             }
         )
 
+class DynamoDBCredits(ChatBotDB):
+    def get_credit_offer(self, credit_id_list):
+        response = self._table.scan()
+        credit_offer = [x for x in response.get('Items') if x['id_credito'] in credit_id_list]
+        return credit_offer
+
+
 class DynamoDBStudents(ChatBotDB):
     pass
     # def get_item(self, web_id):

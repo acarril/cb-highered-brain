@@ -10,6 +10,8 @@ import boto3
 
 app = Chalice(app_name='cb-highered-brain')
 app.debug = True
+app.api.cors = True
+
 _SESSIONS_DB = None
 _LOGS_DB = None
 _STUDENTS_DB = None
@@ -42,7 +44,7 @@ def get_students_db():
 def get_credits_db():
     global _CREDITS_DB
     if _CREDITS_DB is None:
-        _CREDITS_DB = db.DynamoDBStudents(
+        _CREDITS_DB = db.DynamoDBCredits(
             boto3.resource('dynamodb').Table(os.environ['CREDITS_TABLE_NAME'])
         )
     return _CREDITS_DB
@@ -159,7 +161,20 @@ def route_credits_get(session_id):
         saber11=300,
         indigena=bool(int(student_info.get('indigena')))
     )
-    return get_credits_db().list_all_items()
+    return get_credits_db().get_credit_offer(credit_id_list)
+
+@app.route('/credits/creencia_pago_mensual', methods=['GET'], cors=True)
+def route_credits_creencia_pago_mensual():
+    return {
+        "p200": "1.000.000",
+        "p100": "500.000",
+        "p50": "250.000",
+        "p10": "100.000"
+    }
+
+@app.route('/credits/creencia_pago_mensual/{session_id}', methods=['POST'], cors=True)
+def route_credits_creencia_pago_mensual(session_id):
+    return
 
 # # Messages DB
 
