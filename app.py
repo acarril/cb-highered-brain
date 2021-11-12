@@ -2,7 +2,6 @@ from boto3 import session
 from botocore.session import get_session
 from chalice import Chalice
 from cb_brain import db
-from cb_brain import creditos
 from cb_brain.creditos import gen_oferta_creditos
 from chalice import NotFoundError, BadRequestError
 
@@ -14,7 +13,6 @@ app.debug = True
 app.api.cors = True
 
 _SESSIONS_DB = None
-_LOGS_DB = None
 _STUDENTS_DB = None
 _CREDITS_DB = None
 
@@ -25,14 +23,6 @@ def get_sessions_db():
             boto3.resource('dynamodb').Table(os.environ['SESSIONS_TABLE_NAME'])
         )
     return _SESSIONS_DB
-
-def get_logs_db():
-    global _LOGS_DB
-    if _LOGS_DB is None:
-        _LOGS_DB = db.DynamoDBLogs(
-            boto3.resource('dynamodb').Table(os.environ['LOGS_TABLE_NAME'])
-        )
-    return _LOGS_DB
 
 def get_students_db():
     global _STUDENTS_DB
@@ -119,6 +109,17 @@ def route_sessions_grades(session_id):
     body = app.current_request.json_body
     return
 
+@app.route('/options/{node_label}/{session_id}', methods=['PUT'], cors=True)
+def route_options_post(node_label, session_id):
+    body = app.current_request.json_body
+    try:
+        return get_sessions_db().put_attributes(
+            partition_key_value=session_id,
+            attrs_dict=body
+        )
+    except AttributeError:
+        raise BadRequestError("expected a JSON body to POST")
+
 @app.route('/options/{table_stub}', methods=['GET'])
 def route_options_get(table_stub):
     def get_options_db(table_name):
@@ -128,34 +129,8 @@ def route_options_get(table_stub):
     table_name = f'icfesbot-{table_stub}-2021'
     return get_options_db(table_name).list_all_items()
 
-# @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
-# def route_sessions_delete(session_id):
-#     '''Delete session identified by `session_id`'''
-#     return get_sessions_db().delete_item(session_id=session_id)
 
 # Credit Check
-
-@app.route('/credits/dummy/{web_id}', methods=['GET'], cors=True)
-def route_credits_get(web_id):
-    response = [
-            {
-                'id_credito': 1,
-                'nombre_linea': 'Mi credito 1',
-                'tasa_interes': '9% + IPC',
-                'pct_durante': '40%',
-                'pct_post': '60%',
-                'plazo': 'Doble del período de estudios financiado'
-            },
-            {
-                'id_credito': 2,
-                'nombre_linea': 'Mi credito 2',
-                'tasa_interes': '10% + IPC',
-                'pct_durante': '50%',
-                'pct_post': '50%',
-                'plazo': 'Doble del período de estudios financiado'
-            }
-        ]
-    return response
 
 @app.route('/credits/{session_id}', methods=['POST'], cors=True)
 def route_credits_get(session_id):
@@ -185,32 +160,3 @@ def route_credits_creencia_pago_mensual():
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['POST'], cors=True)
 def route_credits_creencia_pago_mensual(session_id):
     return
-
-# # Messages DB
-
-# @app.route('/message', methods=['GET'], cors=True)
-# def get_message():
-#     '''Get message from backend'''
-#     web_id = app.current_request.query_params.get('web_id')
-#     session_id = app.current_request.query_params.get('session_id')
-#     message_id = app.current_request.query_params.get('message_id')
-#     # return {'webID': web_id}
-#     response = get_students_db().get_item(web_id)
-#     message = response.pop()
-#     return message
-
-# # Logs DB
-
-# @app.route('/logs', methods=['GET'], cors=True)
-# def get_logs():
-#     '''Get all sessions'''
-#     return get_logs_db().list_all_items()
-
-# @app.route('/logs/{session_id}', methods=['POST'], cors=True)
-# def add_new_message(session_id):
-#     '''Add new session to database'''
-#     body = app.current_request.json_body
-#     return get_logs_db().add_item(
-#         session_id=session_id,
-#         log_label=body.get('log_label')
-#     )
