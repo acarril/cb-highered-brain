@@ -212,3 +212,6 @@ class DynamoDBStudents(ChatBotDB):
 #         if sessions is not None:
 #             item['sessions'] = sessions
 #         self._table.put_item(Item=item)
+
+class DynamoDBOptions(ChatBotDB):
+    pass

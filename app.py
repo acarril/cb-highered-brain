@@ -1,3 +1,4 @@
+from boto3 import session
 from botocore.session import get_session
 from chalice import Chalice
 from cb_brain import db
@@ -117,6 +118,15 @@ def route_sessions_put(session_id):
 def route_sessions_grades(session_id):
     body = app.current_request.json_body
     return
+
+@app.route('/options/{table_stub}', methods=['GET'])
+def route_options_get(table_stub):
+    def get_options_db(table_name):
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = f'icfesbot-{table_stub}-2021'
+    return get_options_db(table_name).list_all_items()
 
 # @app.route('/sessions/{session_id}', methods=['DELETE'], cors=True)
 # def route_sessions_delete(session_id):
