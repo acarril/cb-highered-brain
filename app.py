@@ -42,16 +42,22 @@ def get_credits_db():
 
 ### Routes
 
-@app.route('/', methods=['GET'], cors=True)
-def hello_world():
-    '''Good ol' 'hello world' for testing purposes'''
-    return {'hello': 'world'}
 
 # Students DB
 
 @app.route('/students/{web_id}', methods=['GET'], cors=True)
-def route_student_get(web_id):
-    '''Get student information'''
+def route_students_get(web_id):
+    """Get information of specific student
+
+    Args:
+        web_id (str): web ID (i.e. student ID)
+
+    Raises:
+        NotFoundError: web ID not found in students table
+
+    Returns:
+        dict: attributes associated to input web ID
+    """    
     params = app.current_request.query_params
     try:
         response = get_students_db().get_item(web_id).pop()
@@ -66,12 +72,26 @@ def route_student_get(web_id):
 
 @app.route('/sessions', methods=['GET'], cors=True)
 def route_sessions_get():
-    '''Get all sessions'''
+    """List all sessions (note this might be resource-intensive)
+
+    Returns:
+        list: list of dicts of attributes associated to all session IDs
+    """    
     return get_sessions_db().list_all_items()
 
 @app.route('/sessions/{session_id}', methods=['GET'], cors=True)
 def route_sessions_get(session_id):
-    '''Get specific session'''
+    """Get specific session
+
+    Args:
+        session_id (str): session ID
+
+    Raises:
+        NotFoundError: session ID not found in sessions table`
+
+    Returns:
+        dict: attributes associated to input session ID
+    """        
     try:
         response = get_sessions_db().get_item(session_id).pop()
     except IndexError:
@@ -80,12 +100,26 @@ def route_sessions_get(session_id):
 
 @app.route('/sessions/user/{web_id}', methods=['GET'], cors=True)
 def route_sessions_user_get(web_id):
-    '''Get all sessions of `user_id`'''
+    """Get all sessions of specific user
+
+    Args:
+        web_id (str): web ID
+
+    Returns:
+        list: list of dicts with session information
+    """    
     return get_sessions_db().get_user(user_id=web_id)
 
 @app.route('/sessions/user/{web_id}', methods=['POST'], cors=True)
 def route_sessions_user_post(web_id):
-    '''Create new session associated to `web_id`'''
+    """Generate new session associated to `web_id`
+
+    Args:
+        web_id (str): user ID
+
+    Returns:
+        session_id: session ID
+    """    
     body = app.current_request.json_body
     response = get_sessions_db().add_item(
         user_id=web_id,
@@ -95,6 +129,17 @@ def route_sessions_user_post(web_id):
 
 @app.route('/sessions/{session_id}', methods=['PUT'], cors=True)
 def route_sessions_put(session_id):
+    """Put attributes
+
+    Args:
+        session_id ([type]): [description]
+
+    Raises:
+        BadRequestError: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     body = app.current_request.json_body
     try:
         return get_sessions_db().put_attributes(
@@ -122,7 +167,16 @@ def route_options_post(node_label, session_id):
 
 @app.route('/options/{table_stub}', methods=['GET'])
 def route_options_get(table_stub):
+    """Get attributes of specific table related to options
+
+    Args:
+        table_stub (str): table stub, one of [areas, institutions, levels, locations, majors, programs]
+
+    Returns:
+        dict: attributes of table
+    """    
     def get_options_db(table_name):
+        """Get table from DDB"""
         return db.DynamoDBOptions(
             boto3.resource('dynamodb').Table(table_name)
         )
@@ -132,8 +186,16 @@ def route_options_get(table_stub):
 
 # Credit Check
 
-@app.route('/credits/{session_id}', methods=['POST'], cors=True)
-def route_credits_get(session_id):
+@app.route('/credits/credito_pregunta_notas/{session_id}', methods=['POST'], cors=True)
+def route_credits_credito_pregunta_notas_get(session_id):
+    """Post student grade and return credit
+
+    Args:
+        session_id (str): session ID
+
+    Returns:
+        list: list of credit offer with credit attributes
+    """    
     session_info = get_sessions_db().get_item(session_id).pop() # d0fda7d82cf741ae812a8f303f105b69
     web_id = session_info.get('web_id')
     student_info = get_students_db().get_item(web_id).pop()
@@ -148,8 +210,8 @@ def route_credits_get(session_id):
     )
     return get_credits_db().get_credit_offer(credit_id_list)
 
-@app.route('/credits/creencia_pago_mensual', methods=['GET'], cors=True)
-def route_credits_creencia_pago_mensual():
+@app.route('/credits/creencia_pago_mensual/{session_id}', methods=['GET'], cors=True)
+def route_credits_creencia_pago_mensual_get(session_id):
     return {
         "p200": "1.000.000",
         "p100": "500.000",
