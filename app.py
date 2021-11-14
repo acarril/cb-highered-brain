@@ -4,6 +4,7 @@ from chalice import Chalice
 from cb_brain import db
 from cb_brain.creditos import gen_oferta_creditos
 from chalice import NotFoundError, BadRequestError
+from random import shuffle
 
 import os
 import boto3
@@ -186,9 +187,9 @@ def route_options_get(table_stub):
 
 # Credit Check
 
-@app.route('/credits/credito_pregunta_notas/{session_id}', methods=['POST'], cors=True)
-def route_credits_credito_pregunta_notas_get(session_id):
-    """Post student grade and return credit
+@app.route('/credits/oferta_creditos/{session_id}', methods=['POST'], cors=True)
+def route_credits_oferta_creditos_get(session_id):
+    """Post student grade and return credit offer
 
     Args:
         session_id (str): session ID
@@ -208,7 +209,11 @@ def route_credits_credito_pregunta_notas_get(session_id):
         saber11=300,
         indigena=bool(int(student_info.get('indigena')))
     )
-    return get_credits_db().get_credit_offer(credit_id_list)
+    credit_list = get_credits_db().get_credit_offer(credit_id_list)
+    indices = [i for i in range(len(credit_list))]
+    shuffle(indices)
+    return [dict(item, index=indices[idx]) for idx, item in enumerate(credit_list)]
+
 
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['GET'], cors=True)
 def route_credits_creencia_pago_mensual_get(session_id):
