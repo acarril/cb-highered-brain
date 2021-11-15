@@ -101,7 +101,7 @@ class DynamoDBSessions(ChatBotDB):
     def delete_item(self, session_id):
         self._table.delete_item(Key={'session_id': session_id})
 
-    def add_reply(self, session_id, attr_name):
+    def add_reply(self, session_id, attr_name):      
         # Create attribute with empty list if it doesn't exist
         response1 = self._table.update_item(
             Key={'session_id': session_id},
@@ -125,6 +125,12 @@ class DynamoDBSessions(ChatBotDB):
         )
         return response2
 
+    def get_latest_reply(self, session_id, attr_name):     
+        response = self._table.get_item(
+            Key={'session_id': session_id},
+            ProjectionExpression=attr_name
+        )
+        return response.get('Item')[attr_name][-1]
 
 class DynamoDBLogs(ChatBotDB):
     def get_item(self):
