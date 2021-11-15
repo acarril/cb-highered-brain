@@ -148,7 +148,11 @@ class DynamoDBSessions(ChatBotDB):
             Key={'session_id': session_id},
             ProjectionExpression=attr_name
         )
-        return response.get('Item')[attr_name][-1]
+        try:
+            latest_reply = response.get('Item')[attr_name][-1]
+        except KeyError:
+            latest_reply = None
+        return latest_reply
 
 class DynamoDBLogs(ChatBotDB):
     def get_item(self):
