@@ -101,7 +101,7 @@ class DynamoDBSessions(ChatBotDB):
     def delete_item(self, session_id):
         self._table.delete_item(Key={'session_id': session_id})
 
-    def add_reply(self, session_id, attr_name):
+    def add_reply(self, session_id, attr_name, reply):
         """Add reply as attribute with list of dicts in session
 
         Args:
@@ -125,7 +125,7 @@ class DynamoDBSessions(ChatBotDB):
             ExpressionAttributeValues={
                 ":vals": [
                     {
-                        'reply': 'al fin',
+                        'reply': reply,
                         'reply_time': datetime.now(timezone.utc).isoformat(),
                         'reply_index': len(response1['Attributes'][attr_name])
                     }
