@@ -52,6 +52,13 @@ def add_query_params(dictionary, path, params, method='get'):
         add_query_param(param, modified_dict=modified_dict)
     return modified_dict
 
+def add_body_to_post(dictionary):
+    modified_dict = copy.deepcopy(dictionary)
+    x = {"name": "body","in": "body"}
+    for k, v in modified_dict['paths'].items():
+        if 'post' in modified_dict['paths'][k]:
+            modified_dict['paths'][k]['post']['parameters'].append(x)
+    return modified_dict
 
 def main():
     parser = argparse.ArgumentParser()
@@ -63,6 +70,7 @@ def main():
     if args.no_options:
         json_content = delete_keys_from_dict(json_content, ['options'])
     json_content = add_query_params(json_content, '/students/{web_id}', params=params)
+    json_content = add_body_to_post(json_content)
     with open('docs/swagger_dist/docs/api-cb-highered-brain.json', 'w') as file:
         json.dump(json_content, file, indent=2)
     if not args.local:
