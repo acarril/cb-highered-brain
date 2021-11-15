@@ -230,7 +230,9 @@ def route_credits_creencia_pago_mensual_get(session_id):
 
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['POST'], cors=True)
 def route_credits_creencia_pago_mensual(session_id):
-    get_sessions_db().add_reply(session_id, 'creencia_pago_mensual')
+    node_name = 'creencia_pago_mensual'
+    reply = app.current_request.json_body.get(node_name)
+    get_sessions_db().add_reply(session_id, node_name, reply)
     dummy = {
         'precio_carrera': '$6.000.000',
         'seleccion_credito_nombre': 'nombre_linea',
