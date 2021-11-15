@@ -1,10 +1,10 @@
 from boto3 import session
 from botocore.session import get_session
 from chalice import Chalice
+from chalice import NotFoundError, BadRequestError
 from cb_brain import db
 from cb_brain.creditos import gen_oferta_creditos
-from chalice import NotFoundError, BadRequestError
-from random import shuffle
+from cb_brain.utils import add_random_index
 
 import os
 import boto3
@@ -210,9 +210,8 @@ def route_credits_oferta_creditos_get(session_id):
         indigena=bool(int(student_info.get('indigena')))
     )
     credit_list = get_credits_db().get_credit_offer(credit_id_list)
-    indices = [i for i in range(len(credit_list))]
-    shuffle(indices)
-    return [dict(item, index=indices[idx]) for idx, item in enumerate(credit_list)]
+    credit_list = add_random_index(credit_list)
+    return credit_list
 
 
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['GET'], cors=True)
