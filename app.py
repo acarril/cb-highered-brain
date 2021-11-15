@@ -275,4 +275,7 @@ def route_credits_estrato(session_id):
 def route_credits_sisben(session_id):
     node_name = 'sisben'
     reply = app.current_request.json_body.get(node_name)
-    get_sessions_db().add_reply(session_id, node_name, reply)
+    sisben_letter = ''.join([n for n in reply if n.isalpha()])
+    sisben_number = ''.join([n for n in reply if n.isdigit()])
+    sisben_bajoC8 = int((sisben_letter in ['A', 'B']) or ((sisben_letter in ['C']) and (int(sisben_number) < 8)))
+    get_sessions_db().add_reply(session_id, 'sisben_bajoC8', sisben_bajoC8)
