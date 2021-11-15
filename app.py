@@ -166,7 +166,7 @@ def route_options_post(node_label, session_id):
     except AttributeError:
         raise BadRequestError("expected a JSON body to POST")
 
-@app.route('/options/{table_stub}', methods=['GET'])
+@app.route('/options_table/{table_stub}', methods=['GET'])
 def route_options_get(table_stub):
     """Get attributes of specific table related to options
 
@@ -196,7 +196,7 @@ def route_credits_oferta_creditos_get(session_id):
 
     Returns:
         list: list of credit offer with credit attributes
-    """    
+    """
     session_info = get_sessions_db().get_item(session_id).pop() # d0fda7d82cf741ae812a8f303f105b69
     web_id = session_info.get('web_id')
     student_info = get_students_db().get_item(web_id).pop()
@@ -213,16 +213,28 @@ def route_credits_oferta_creditos_get(session_id):
     credit_list = add_random_index(credit_list)
     return credit_list
 
+@app.route('/credits/caracteristicas_credito/{session_id}', methods=['POST'], cors=True)
+def route_credits_caracteristicas_credito_post(session_id):
+    body = app.current_request.json_body
+
 
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['GET'], cors=True)
 def route_credits_creencia_pago_mensual_get(session_id):
-    return {
+    dummy = {
         "p200": "1.000.000",
         "p100": "500.000",
         "p50": "250.000",
         "p10": "100.000"
     }
+    return dummy
 
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['POST'], cors=True)
 def route_credits_creencia_pago_mensual(session_id):
-    return
+    get_sessions_db().add_reply(session_id, 'creencia_pago_mensual')
+    dummy = {
+        'precio_carrera': '$6.000.000',
+        'seleccion_credito_nombre': 'nombre_linea',
+        'pago_mensual': '$110.000',
+        'tiempo_postgrad': '4'
+    }
+    return dummy

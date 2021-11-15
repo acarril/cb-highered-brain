@@ -10,26 +10,18 @@
     "https"
   ],
   "paths": {
-    "/": {
-      "get": {
-        "summary": "Good ol' 'hello world' for testing purposes",
+    "/credits/caracteristicas_credito/{session_id}": {
+      "post": {
         "produces": [
           "application/json"
         ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
-        }
-      }
-    },
-    "/credits/creencia_pago_mensual": {
-      "get": {
-        "produces": [
-          "application/json"
         ],
         "responses": {
           "200": {
@@ -42,36 +34,13 @@
       }
     },
     "/credits/creencia_pago_mensual/{session_id}": {
-      "post": {
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "session_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
-            }
-          }
-        }
-      }
-    },
-    "/credits/dummy/{web_id}": {
       "get": {
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "web_id",
+            "name": "session_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -85,9 +54,7 @@
             }
           }
         }
-      }
-    },
-    "/credits/{session_id}": {
+      },
       "post": {
         "produces": [
           "application/json"
@@ -110,7 +77,59 @@
         }
       }
     },
-    "/options/{table_stub}": {
+    "/credits/oferta_creditos/{session_id}": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/options/{node_label}/{session_id}": {
+      "put": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "node_label",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/options_table/{table_stub}": {
       "get": {
         "produces": [
           "application/json"
