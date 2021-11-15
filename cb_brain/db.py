@@ -101,6 +101,29 @@ class DynamoDBSessions(ChatBotDB):
     def delete_item(self, session_id):
         self._table.delete_item(Key={'session_id': session_id})
 
+    def add_reply(self, session_id, attr_name):
+        # Create attribute with empty list if it doesn't exist
+        response1 = self._table.update_item(
+            Key={'session_id': session_id},
+            UpdateExpression=f"set {attr_name} = if_not_exists({attr_name}, :l)",
+            ExpressionAttributeValues={':l':[]},
+            ReturnValues='UPDATED_NEW'
+        )
+        # Update list with new reply
+        response2 = self._table.update_item(
+            Key={'session_id': session_id},
+            UpdateExpression=f"set {attr_name} = list_append({attr_name}, :vals)",
+            ExpressionAttributeValues={
+                ":vals": [
+                    {
+                        'reply': 'al fin',
+                        'reply_time': datetime.now(timezone.utc).isoformat(),
+                        'reply_index': len(response1['Attributes'][attr_name])
+                    }
+                ]
+            }
+        )
+        return response2
 
 
 class DynamoDBLogs(ChatBotDB):
