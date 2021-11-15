@@ -264,3 +264,15 @@ def route_credits_creencia_pago_mensual(session_id):
         'tiempo_postgrad': '4'
     }
     return dummy
+
+@app.route('/credits/estrato/{session_id}', methods=['POST'])
+def route_credits_estrato(session_id):
+    node_name = 'estrato'
+    reply = app.current_request.json_body.get(node_name)
+    get_sessions_db().add_reply(session_id, node_name, reply)
+
+@app.route('/credits/sisben/{session_id}', methods=['POST'])
+def route_credits_sisben(session_id):
+    node_name = 'sisben'
+    reply = app.current_request.json_body.get(node_name)
+    get_sessions_db().add_reply(session_id, node_name, reply)
