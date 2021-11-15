@@ -197,21 +197,45 @@ def route_credits_oferta_creditos_get(session_id):
     Returns:
         list: list of credit offer with credit attributes
     """
-    session_info = get_sessions_db().get_item(session_id).pop() # d0fda7d82cf741ae812a8f303f105b69
-    web_id = session_info.get('web_id')
-    student_info = get_students_db().get_item(web_id).pop()
-    nota_string = app.current_request.json_body.get('credito_pregunta_notas')
-    nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
-    credit_id_list = gen_oferta_creditos(
-        estrato=int(student_info.get('estrato')),
-        sisben_bajoC8=int(student_info.get('sisben_bajoC8')),
-        nota=nota_int,
-        saber11=300,
-        indigena=bool(int(student_info.get('indigena')))
-    )
-    credit_list = get_credits_db().get_credit_offer(credit_id_list)
-    credit_list = add_random_index(credit_list)
-    return credit_list
+    # Add reply (grades)
+    node_name = 'credito_pregunta_notas'
+    reply = app.current_request.json_body.get(node_name)
+    get_sessions_db().add_reply(session_id, node_name, reply)
+    
+    # Gather credit attributes in student table
+    def gather_credit_attrs(session_id=session_id):
+        session_info = get_sessions_db().get_item(session_id).pop()
+        web_id = session_info.get('web_id')
+        student_info = get_students_db().get_item(web_id).pop()
+        return {k:student_info[k] for k in ('estrato', 'sisben_bajoC8') if k in student_info}
+        
+    # Construct dict of missing attributes
+    credit_attrs = gather_credit_attrs()
+    name_map = {'estrato': 'faltaEstrato', 'sisben_bajoC8': 'faltaSisben'}
+    missing_attrs = {name_map[name]: val=='' for name, val in credit_attrs.items()}
+    
+    if True in missing_attrs.values():
+        credit_list = []
+
+    else:
+        session_info = get_sessions_db().get_item(session_id).pop() # d0fda7d82cf741ae812a8f303f105b69
+        web_id = session_info.get('web_id')
+        student_info = get_students_db().get_item(web_id).pop()
+        nota_string = app.current_request.json_body.get('credito_pregunta_notas')
+        nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
+        credit_id_list = gen_oferta_creditos(
+            estrato=int(student_info.get('estrato')),
+            sisben_bajoC8=int(student_info.get('sisben_bajoC8')),
+            nota=nota_int,
+            saber11=300,
+            indigena=bool(int(student_info.get('indigena')))
+        )
+        credit_list = get_credits_db().get_credit_offer(credit_id_list)
+        credit_list = add_random_index(credit_list)
+    
+    credit_list = {'creditos': credit_list}
+    response = {**missing_attrs, **credit_list}
+    return response
 
 @app.route('/credits/caracteristicas_credito/{session_id}', methods=['POST'], cors=True)
 def route_credits_caracteristicas_credito_post(session_id):
