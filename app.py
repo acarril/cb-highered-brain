@@ -202,40 +202,55 @@ def route_credits_oferta_creditos_get(session_id):
     reply = app.current_request.json_body.get(node_name)
     get_sessions_db().add_reply(session_id, node_name, reply)
     
-    # Gather credit attributes in student table
-    def gather_credit_attrs(session_id=session_id):
+    # Collect estrato, sisben from session replies
+    def credit_attrs_session_flattened(attr_lst=['estrato', 'sisben_bajoC8'], session_id=session_id):
+        attrs = {k:get_sessions_db().get_latest_reply(session_id, k) for k in attr_lst}
+        replies = {k:(v if v is None else attrs[k]['reply']) for k,v in attrs.items()}
+        return replies
+
+    def get_student_info(session_id=session_id):
         session_info = get_sessions_db().get_item(session_id).pop()
         web_id = session_info.get('web_id')
         student_info = get_students_db().get_item(web_id).pop()
-        return {k:student_info[k] for k in ('estrato', 'sisben_bajoC8') if k in student_info}
-        
-    # Construct dict of missing attributes
-    credit_attrs = gather_credit_attrs()
-    name_map = {'estrato': 'faltaEstrato', 'sisben_bajoC8': 'faltaSisben'}
-    missing_attrs = {name_map[name]: val=='' for name, val in credit_attrs.items()}
-    
-    if True in missing_attrs.values():
-        credit_list = []
+        return student_info
 
-    else:
-        session_info = get_sessions_db().get_item(session_id).pop() # d0fda7d82cf741ae812a8f303f105b69
-        web_id = session_info.get('web_id')
-        student_info = get_students_db().get_item(web_id).pop()
+    def credit_attrs_student(student_info, attr_lst=['estrato', 'sisben_bajoC8'], session_id=session_id):    
+        return dict((k, student_info[k]) for k in attr_lst)
+
+    credit_attrs = credit_attrs_session_flattened()
+    # credit_attrs = {'estrato':None, 'sisben_bajoC8':1}
+    missing_attrs = [k for k,v in credit_attrs.items() if v is None]
+    student_info = get_student_info()
+    if missing_attrs:
+        student_attrs = credit_attrs_student(student_info, attr_lst=missing_attrs)
+        # student_attrs = {'estrato':'', 'sisben_bajoC8':1}
+        credit_attrs = {k:(v if v is not None else student_attrs[k]) for k,v in credit_attrs.items()}
+    
+    # Construct dict of missing attrs (boolean)
+    missing_attrs = [k for k,v in credit_attrs.items() if v == '']
+    name_map = {'estrato': 'faltaEstrato', 'sisben_bajoC8': 'faltaSisben'}
+    missing_attrs_dict = {name_map[k]:(True if k in missing_attrs else False) for k,v in credit_attrs.items()}
+
+    # Generate credit offer
+    if not missing_attrs:
         nota_string = app.current_request.json_body.get('credito_pregunta_notas')
         nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
         credit_id_list = gen_oferta_creditos(
-            estrato=int(student_info.get('estrato')),
-            sisben_bajoC8=int(student_info.get('sisben_bajoC8')),
-            nota=nota_int,
-            saber11=300,
-            indigena=bool(int(student_info.get('indigena')))
+                estrato=int(credit_attrs['estrato']),
+                sisben_bajoC8=int(credit_attrs['sisben_bajoC8']),
+                nota=nota_int,
+                saber11=300,
+                indigena=bool(int(student_info.get('indigena')))
         )
         credit_list = get_credits_db().get_credit_offer(credit_id_list)
         credit_list = add_random_index(credit_list)
-    
+    else:
+        credit_list = []
+
     credit_list = {'creditos': credit_list}
-    response = {**missing_attrs, **credit_list}
+    response = {**missing_attrs_dict, **credit_list}
     return response
+
 
 @app.route('/credits/caracteristicas_credito/{session_id}', methods=['POST'], cors=True)
 def route_credits_caracteristicas_credito_post(session_id):
