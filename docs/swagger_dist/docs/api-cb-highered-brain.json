@@ -222,14 +222,59 @@
         }
       }
     },
-    "/options_table/{table_stub}": {
+    "/options_table/areas": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/options_table/institutions": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/options_table/majors": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/options_table/programs/{institution_id}": {
       "get": {
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "table_stub",
+            "name": "institution_id",
             "in": "path",
             "required": true,
             "type": "string"

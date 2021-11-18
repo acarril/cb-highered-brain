@@ -168,16 +168,28 @@ def route_options_post(node_label, session_id):
     except AttributeError:
         raise BadRequestError("expected a JSON body to POST")
 
-@app.route('/options_table/{table_stub}', methods=['GET'])
-def route_options_get(table_stub):
-    """Get attributes of specific table related to options
+# @app.route('/options_table/{table_stub}', methods=['GET'])
+# def route_options_get(table_stub):
+#     """Get attributes of specific table related to options
 
-    Args:
-        table_stub (str): table stub, one of [areas, institutions, levels, locations, majors, programs]
+#     Args:
+#         table_stub (str): table stub, one of [areas, institutions, levels, locations, majors, programs]
 
-    Returns:
-        dict: attributes of table
-    """    
+#     Returns:
+#         dict: attributes of table
+#     """    
+#     def get_options_db(table_name):
+#         """Get table from DDB"""
+#         return db.DynamoDBOptions(
+#             boto3.resource('dynamodb').Table(table_name)
+#         )
+#     table_name = f'icfesbot-{table_stub}-2021'
+#     return get_options_db(table_name).list_all_items()
+
+@app.route('/options_table/areas', methods=['GET'])
+def route_options_table_areas_get():
+    path = app.current_request.path
+    table_stub = path.split('/').pop()
     def get_options_db(table_name):
         """Get table from DDB"""
         return db.DynamoDBOptions(
@@ -186,6 +198,41 @@ def route_options_get(table_stub):
     table_name = f'icfesbot-{table_stub}-2021'
     return get_options_db(table_name).list_all_items()
 
+@app.route('/options_table/institutions', methods=['GET'])
+def route_options_table_areas_get():
+    path = app.current_request.path
+    table_stub = path.split('/').pop()
+    def get_options_db(table_name):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = f'icfesbot-{table_stub}-2021'
+    return get_options_db(table_name).list_all_items()
+
+@app.route('/options_table/majors', methods=['GET'])
+def route_options_table_areas_get():
+    path = app.current_request.path
+    table_stub = path.split('/').pop()
+    def get_options_db(table_name):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = f'icfesbot-{table_stub}-2021'
+    return get_options_db(table_name).list_all_items()
+
+@app.route('/options_table/programs/{institution_id}', methods=['GET'])
+def route_options_table_areas_get(institution_id):
+    path = app.current_request.path
+    table_stub = 'programs'
+    def get_options_db(table_name):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = f'icfesbot-{table_stub}-2021'
+    return get_options_db(table_name).get_programs_of_institution(institution_id)
 
 # Credit Check
 

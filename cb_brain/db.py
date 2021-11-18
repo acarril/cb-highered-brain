@@ -265,4 +265,9 @@ class DynamoDBStudents(ChatBotDB):
 #         self._table.put_item(Item=item)
 
 class DynamoDBOptions(ChatBotDB):
-    pass
+    def get_programs_of_institution(self, institution_id):
+        response = self._table.query(
+            IndexName='institution_id-index',
+            KeyConditionExpression=Key('institution_id').eq(institution_id)
+        )
+        return response['Items']
