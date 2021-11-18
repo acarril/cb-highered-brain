@@ -233,7 +233,7 @@ def gen_df_creditos():
     }
     return pd.DataFrame(data=d)
 
-def gen_oferta_creditos(estrato, sisben_bajoC8, nota, saber11, indigena=False):
+def gen_oferta_creditos(estrato, sisben_bajoC8, saber11, nota = 34, indigena=False):
     df = gen_df_creditos()
     mask1 = (df.req_estrato_max >= estrato) & (df.req_sisben_bajoC8 <= sisben_bajoC8) & (df.req_notas <= nota)
     if not indigena:

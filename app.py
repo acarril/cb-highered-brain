@@ -155,6 +155,8 @@ def route_sessions_grades(session_id):
     body = app.current_request.json_body
     return
 
+# Options
+
 @app.route('/options/{node_label}/{session_id}', methods=['PUT'], cors=True)
 def route_options_post(node_label, session_id):
     body = app.current_request.json_body
@@ -233,13 +235,12 @@ def route_credits_oferta_creditos_get(session_id):
 
     # Generate credit offer
     if not missing_attrs:
-        nota_string = app.current_request.json_body.get('credito_pregunta_notas')
-        nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
+        puntaje = app.current_request.json_body.get('puntaje')
+        # nota_int = {'sobre34': 34, 'bajo34':30, 'bajo30':20}.get(nota_string)
         credit_id_list = gen_oferta_creditos(
                 estrato=int(credit_attrs['estrato']),
                 sisben_bajoC8=int(credit_attrs['sisben_bajoC8']),
-                nota=nota_int,
-                saber11=300,
+                saber11=int(puntaje),
                 indigena=bool(int(student_info.get('indigena')))
         )
         credit_list = get_credits_db().get_credit_offer(credit_id_list)
@@ -247,9 +248,9 @@ def route_credits_oferta_creditos_get(session_id):
     else:
         credit_list = []
 
-    credit_list = {'creditos': credit_list}
-    response = {**missing_attrs_dict, **credit_list}
-    return response
+    # credit_list = {'creditos': credit_list}
+    # response = {**missing_attrs_dict, **credit_list}
+    return credit_list
 
 
 @app.route('/credits/caracteristicas_credito/{session_id}', methods=['POST'], cors=True)
