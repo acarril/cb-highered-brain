@@ -295,3 +295,13 @@ def route_credits_sisben(session_id):
     sisben_number = ''.join([n for n in reply if n.isdigit()])
     sisben_bajoC8 = int((sisben_letter in ['A', 'B']) or ((sisben_letter in ['C']) and (int(sisben_number) < 8)))
     get_sessions_db().add_reply(session_id, 'sisben_bajoC8', sisben_bajoC8)
+
+# Brain menu maker
+
+@app.route('/brain/menu_carreras/{session_id}', methods=['POST'], cors=True)
+def route_brain_menu_carreras(session_id):
+    body = app.current_request.json_body
+    dummy = {
+        {"brain": "ML-Targeted", "menu": ["2364", "549", "2974", "5295"], "question": "Wage"}
+    }
+    return dummy
