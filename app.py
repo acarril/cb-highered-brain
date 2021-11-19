@@ -189,7 +189,7 @@ def route_options_post(node_label, session_id):
 #     table_name = f'icfesbot-{table_stub}-2021'
 #     return get_options_db(table_name).list_all_items()
 
-@app.route('/options_table/areas', methods=['GET'])
+@app.route('/options_table/areas', methods=['GET'], cors=True)
 def route_options_table_areas_get():
     path = app.current_request.path
     table_stub = path.split('/').pop()
@@ -201,7 +201,7 @@ def route_options_table_areas_get():
     table_name = f'icfesbot-{table_stub}-2021'
     return get_options_db(table_name).list_all_items()
 
-@app.route('/options_table/institutions', methods=['GET'])
+@app.route('/options_table/institutions', methods=['GET'], cors=True)
 def route_options_table_areas_get():
     path = app.current_request.path
     table_stub = path.split('/').pop()
@@ -213,7 +213,7 @@ def route_options_table_areas_get():
     table_name = f'icfesbot-{table_stub}-2021'
     return get_options_db(table_name).list_all_items()
 
-@app.route('/options_table/majors', methods=['GET'])
+@app.route('/options_table/majors', methods=['GET'], cors=True)
 def route_options_table_areas_get():
     path = app.current_request.path
     table_stub = path.split('/').pop()
@@ -225,7 +225,7 @@ def route_options_table_areas_get():
     table_name = f'icfesbot-{table_stub}-2021'
     return get_options_db(table_name).list_all_items()
 
-@app.route('/options_table/programs/{institution_id}', methods=['GET'])
+@app.route('/options_table/programs/{institution_id}', methods=['GET'], cors=True)
 def route_options_table_areas_get(institution_id):
     path = app.current_request.path
     table_stub = 'programs'
@@ -370,7 +370,7 @@ def route_brain_menu_carreras(session_id):
     genero_dict = {'F': 0, 'M': 1, '': 0}
     sector_private_dict = {'OFICIAL': 0, 'NO OFICIAL': 1, '': 0}
     zona_urban_dict = {'URBANA': 1, 'RURAL':0, '': 1}
-
+    
     fixed_params = {
         "country": "COL"
     }
@@ -403,3 +403,11 @@ def route_brain_menu_carreras(session_id):
     ec2_url = 'http://ec2-3-238-222-45.compute-1.amazonaws.com:5000/'
     brain_response = requests.post(ec2_url, json=dict_for_brains)
     return brain_response.content
+
+# {
+#     "wage_deviation": <dif calculada en datoreal_opcion; multiplicada por -1 si subestima>,
+#     "showed_programs": <lista de los `option_id` que se le han mostrado>,
+#     "explored_programs": <lista de los `option_id` en que ha hecho click>,
+#     "area_of_int": <area_id de ultima opcion elegida (del inicio o del ultimo menu)>,
+#     "level_of_int": <level_id de ultima opcion elegida (del inicio o del ultimo menu)>
+# }
