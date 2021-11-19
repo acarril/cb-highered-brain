@@ -3,8 +3,11 @@ from botocore.session import get_session
 from chalice import Chalice
 from chalice import NotFoundError, BadRequestError
 from cb_brain import db
+from cb_brain import utils
 from cb_brain.creditos import gen_oferta_creditos
 from cb_brain.utils import add_random_index
+
+import requests
 
 import os
 import boto3
@@ -345,10 +348,58 @@ def route_credits_sisben(session_id):
 
 # Brain menu maker
 
-@app.route('/brain/menu_carreras/{session_id}', methods=['POST'], cors=True)
-def route_brain_menu_carreras(session_id):
+@app.route('/brain/menu_carreras_dummy/{session_id}', methods=['POST'], cors=True)
+def route_brain_menu_carreras_dummy(session_id):
     body = app.current_request.json_body
     dummy = {
         {"brain": "ML-Targeted", "menu": ["2364", "549", "2974", "5295"], "question": "Wage"}
     }
     return dummy
+
+@app.route('/brain/menu_carreras/{session_id}', methods=['POST'], cors=True)
+def route_brain_menu_carreras(session_id):
+    body = app.current_request.json_body
+    def get_student_info(session_id=session_id):
+        session_info = get_sessions_db().get_item(session_id).pop()
+        web_id = session_info.get('web_id')
+        student_info = get_students_db().get_item(web_id).pop()
+        return student_info
+    
+    # Get student info and create dicts for brain translation
+    student_info = get_student_info(session_id)
+    genero_dict = {'F': 0, 'M': 1, '': 0}
+    sector_private_dict = {'OFICIAL': 0, 'NO OFICIAL': 1, '': 0}
+    zona_urban_dict = {'URBANA': 1, 'RURAL':0, '': 1}
+
+    fixed_params = {
+        "country": "COL"
+    }
+    random_params = {
+        "brain_id": utils.select_random_brain_id()
+    }
+    user_params = {
+        "location": 30, # municipio
+        "score": 250, # body.get('puntaje'),   # puntaje
+        "score_decil": 10,  # [se calcula]
+        "private": sector_private_dict[student_info.get('sector')], # students
+        "urban": zona_urban_dict[student_info.get('zona')], # students
+        "jornada": 1, # students
+        "gender": genero_dict[student_info.get('genero')]
+    }
+    session_params = {
+        'area_of_int': 1,
+        'level_of_int': 1,
+        "wage_deviation": 1, # body.get('wage_deviation'),   # real in ~[-10, 10]
+        "showed_majors": [2], # body.get('showed_majors'), # carreras que hemos mostrado
+        "explored_majors": [34,35] # body.get('explored_majors') # carreras que ha hecho click
+    }
+    dict_for_brains = {
+        **fixed_params,
+        **random_params,
+        **user_params,
+        **session_params
+    }
+
+    ec2_url = 'http://ec2-3-238-222-45.compute-1.amazonaws.com:5000/'
+    brain_response = requests.post(ec2_url, json=dict_for_brains)
+    return brain_response.content
