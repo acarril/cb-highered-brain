@@ -237,6 +237,20 @@ def route_options_table_areas_get(institution_id):
     table_name = f'icfesbot-{table_stub}-2021'
     return get_options_db(table_name).get_programs_of_institution(institution_id)
 
+@app.route('/options_table/program_ids', methods=['POST'], cors=True)
+def route_options_table_program_ids_get():
+    table_stub = 'programs'
+    def get_options_db(table_name):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = f'icfesbot-{table_stub}-2021'
+    body = app.current_request.json_body
+    options_id_lst = body.get('options_id_lst')
+    return get_options_db(table_name).get_programs_by_id(options_id_lst)
+
+
 # Credit Check
 
 @app.route('/credits/oferta_creditos/{session_id}', methods=['POST'], cors=True)

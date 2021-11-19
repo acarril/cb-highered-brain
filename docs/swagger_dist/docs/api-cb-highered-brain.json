@@ -21,10 +21,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -48,10 +44,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -75,10 +67,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -123,10 +111,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -150,10 +134,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -177,10 +157,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -204,10 +180,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -294,6 +266,21 @@
         }
       }
     },
+    "/options_table/program_ids": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
     "/options_table/programs/{institution_id}": {
       "get": {
         "produces": [
@@ -367,10 +354,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {
@@ -439,10 +422,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body"
           }
         ],
         "responses": {

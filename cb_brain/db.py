@@ -271,3 +271,10 @@ class DynamoDBOptions(ChatBotDB):
             KeyConditionExpression=Key('institution_id').eq(institution_id)
         )
         return response['Items']
+
+    def get_programs_by_id(self, options_id_lst):
+        programs = []
+        for item in options_id_lst:
+            response = self._table.get_item(Key={'option_id': item})
+            programs.append(response['Item']) 
+        return programs
