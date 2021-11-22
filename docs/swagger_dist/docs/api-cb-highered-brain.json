@@ -434,6 +434,35 @@
         }
       }
     },
+    "/student_percentile/{session_id}/{puntaje}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "puntaje",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
     "/students/{web_id}": {
       "get": {
         "summary": "Get student information",

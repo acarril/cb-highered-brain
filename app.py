@@ -72,6 +72,14 @@ def route_students_get(web_id):
     else:
         return {k: response[k] for k in [*params]}
 
+
+@app.route('/student_percentile/{session_id}/{puntaje}', methods=['GET'], cors=True)
+def route_student_percentil(session_id, puntaje):
+    puntaje = int(puntaje)
+    get_sessions_db().add_reply(session_id, 'puntaje', puntaje)
+    inv_percentile = utils.compute_2020_inv_percentile(puntaje)
+    return {"inv_percentil": inv_percentile}
+
 # Sessions DB
 
 @app.route('/sessions', methods=['GET'], cors=True)
@@ -320,6 +328,8 @@ def route_credits_oferta_creditos_get(session_id):
 @app.route('/credits/caracteristicas_credito/{session_id}', methods=['POST'], cors=True)
 def route_credits_caracteristicas_credito_post(session_id):
     body = app.current_request.json_body
+    id_credito = body.get('caracteristicas_credito')
+    get_sessions_db().add_reply(session_id, 'caracteristicas_credito', id_credito)
 
 
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['GET'], cors=True)
@@ -385,6 +395,10 @@ def route_brain_menu_carreras(session_id):
     sector_private_dict = {'OFICIAL': 0, 'NO OFICIAL': 1, '': 0}
     zona_urban_dict = {'URBANA': 1, 'RURAL':0, '': 1}
     
+    # Extract/compute scores and relative pos
+    puntaje = int(body.get('puntaje'))
+    decil = utils.compute_2020_decile(puntaje)
+
     fixed_params = {
         "country": "COL"
     }
@@ -392,20 +406,20 @@ def route_brain_menu_carreras(session_id):
         "brain_id": utils.select_random_brain_id()
     }
     user_params = {
-        "location": 30, # municipio
-        "score": 250, # body.get('puntaje'),   # puntaje
-        "score_decil": 10,  # [se calcula]
-        "private": sector_private_dict[student_info.get('sector')], # students
-        "urban": zona_urban_dict[student_info.get('zona')], # students
-        "jornada": 1, # students
+        "location": 30, # NOTE! transformar
+        "score": puntaje,
+        "score_decil": decil,
+        "private": sector_private_dict[student_info.get('sector')],
+        "urban": zona_urban_dict[student_info.get('zona')],
+        "jornada": 1, # no tenemos el dato
         "gender": genero_dict[student_info.get('genero')]
     }
     session_params = {
-        'area_of_int': 1,
-        'level_of_int': 1,
-        "wage_deviation": 1, # body.get('wage_deviation'),   # real in ~[-10, 10]
-        "showed_majors": [2], # body.get('showed_majors'), # carreras que hemos mostrado
-        "explored_majors": [34,35] # body.get('explored_majors') # carreras que ha hecho click
+        'area_of_int': body.get('area_of_int'),
+        'level_of_int': body.get('level_of_int'),
+        "wage_deviation": utils.process_wage_deviation(body.get('wage_deviation')), # body.get('wage_deviation'),   # real in ~[-10, 10]
+        "showed_majors": body.get('showed_programs'), # carreras que hemos mostrado
+        "explored_majors": body.get('explored_programs') # carreras que ha hecho click
     }
     dict_for_brains = {
         **fixed_params,
@@ -423,5 +437,6 @@ def route_brain_menu_carreras(session_id):
 #     "showed_programs": <lista de los `option_id` que se le han mostrado>,
 #     "explored_programs": <lista de los `option_id` en que ha hecho click>,
 #     "area_of_int": <area_id de ultima opcion elegida (del inicio o del ultimo menu)>,
-#     "level_of_int": <level_id de ultima opcion elegida (del inicio o del ultimo menu)>
+#     "level_of_int": <level_id de ultima opcion elegida (del inicio o del ultimo menu)>,
+#     "puntaje": <puntaje saber11>
 # }

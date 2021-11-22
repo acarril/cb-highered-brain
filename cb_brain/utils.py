@@ -15,8 +15,19 @@ def add_random_index(lst:list, index_name:str='index') -> list:
     return [dict(item, **{index_name:indices[idx]}) for idx, item in enumerate(lst)]
 
 
-def select_random_brain_id(brain_id_lst:list=['ML-Targeted', 'ML-Diverse']) -> str:
+def select_random_brain_id(brain_id_lst:list=None) -> str:
+    brain_names = ['Random', 'EconMatriculations', 'EconInteractions', 'Dynamic', 'ML']
+    brain_constraints = ['Unrestricted', 'Diverse', 'Targeted']
+    brain_id_lst = [f'{x}-{y}' for x in brain_names for y in brain_constraints]
     return random.choice(brain_id_lst)
+
+# {'Random': {'Unrestricted': 1, 'Diverse': 2, 'Targeted': 3},
+#  'EconMatriculations': {'Unrestricted': 4, 'Diverse': 5, 'Targeted': 6},
+#  'EconInteractions': {'Unrestricted': 7, 'Diverse': 8, 'Targeted': 9},
+#  'Dynamic': {'Unrestricted': 10, 'Diverse': 11, 'Targeted': 12},
+#  'ML': {'Unrestricted': 13, 'Diverse': 14, 'Targeted': 15}}
+
+
 
 def compute_2020_inv_percentile(puntaje:int) -> int:
     """Compute inverse percentile (i.e. (1 - percentile)) for a given score considering 2020-2 distribution of scores
@@ -94,5 +105,12 @@ def compute_2020_decile(puntaje:int) -> int:
     else:
         return 100 - percentile
 
-              
 
+def process_wage_deviation(wage_deviation):
+    f = float(wage_deviation)
+    if (f < 0): # subestimacion
+        return abs(f)
+    elif (f > 0):
+        return 1/f
+    else:
+        return 1
