@@ -114,3 +114,44 @@ def process_wage_deviation(wage_deviation):
         return 1/f
     else:
         return 1
+
+
+def calculador_pago_mensual(pct_pago_durante):
+    pct_to_attrs = {
+        0: {
+            'plazo_amort': 96,
+            'cuota_estudios': '$0',
+            'cuota_amort': '$468.000 - $646.000'
+        },
+        10: {
+            'plazo_amort': 96,
+            'cuota_estudios': '$83.000 - 86.000',
+            'cuota_amort': '$421.000 - $582.000'
+        },
+        25: {
+            'plazo_amort': 96,
+            'cuota_estudios': '$209.000 - 215.000',
+            'cuota_amort': '$352.000 - $485.000'
+        },
+        30: {
+            'plazo_amort': 72,
+            'cuota_estudios': '$251.000 - 258.000',
+            'cuota_amort': '$431.000 - $551.000'
+        },
+        40: {
+            'plazo_amort': 72,
+            'cuota_estudios': '$335.000 - 342.000',
+            'cuota_amort': '$545.000 - $634.000'
+        },
+        60: {
+            'plazo_amort': 48,
+            'cuota_estudios': '$502.000 - 512.000',
+            'cuota_amort': '$363.000 - $415.000'
+        },
+        100: {
+            'plazo_amort': 0,
+            'cuota_estudios': '$837.000 - 854.000',
+            'cuota_amort': '$0'
+        }
+    }
+    return pct_to_attrs[pct_pago_durante]

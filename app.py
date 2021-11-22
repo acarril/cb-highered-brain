@@ -345,15 +345,22 @@ def route_credits_creencia_pago_mensual_get(session_id):
 @app.route('/credits/creencia_pago_mensual/{session_id}', methods=['POST'], cors=True)
 def route_credits_creencia_pago_mensual(session_id):
     node_name = 'creencia_pago_mensual'
-    reply = app.current_request.json_body.get(node_name)
-    get_sessions_db().add_reply(session_id, node_name, reply)
-    dummy = {
-        'precio_carrera': '$6.000.000',
-        'seleccion_credito_nombre': 'nombre_linea',
-        'pago_mensual': '$110.000',
-        'tiempo_postgrad': '4'
+    reply_crencia = app.current_request.json_body.get(node_name)
+    get_sessions_db().add_reply(session_id, node_name, reply_crencia)
+    seleccion_id_credito = get_sessions_db().get_latest_reply(session_id, 'caracteristicas_credito')['reply']
+    info_linea = get_credits_db().get_item(seleccion_id_credito).pop()
+    nombre_linea = info_linea.get('nombre_linea_abrev')
+    pct_pago_durante = info_linea.get('pct_pago_durante')
+    info_repago = utils.calculador_pago_mensual(pct_pago_durante)
+    pago_mensual = info_repago.get('cuota_estudios') + ' durante 8 semestres de estudios y ' + info_repago.get('cuota_amort')
+    anos_repago = str(int(info_repago.get('plazo_amort')/12))
+    response = {
+        'precio_carrera': '$5.000.000',
+        'seleccion_credito_nombre': nombre_linea,
+        'pago_mensual': pago_mensual,
+        'tiempo_postgrad': anos_repago
     }
-    return dummy
+    return response
 
 @app.route('/credits/estrato/{session_id}', methods=['POST'])
 def route_credits_estrato(session_id):
@@ -433,10 +440,10 @@ def route_brain_menu_carreras(session_id):
     return brain_response.content
 
 # {
-#     "wage_deviation": <dif calculada en datoreal_opcion; multiplicada por -1 si subestima>,
-#     "showed_programs": <lista de los `option_id` que se le han mostrado>,
-#     "explored_programs": <lista de los `option_id` en que ha hecho click>,
+#     "wage_deviation": <dif calculada en datoreal_opcion; multiplicada por -1 si subestima, o 0 si está en rango>,
+#     "showed_programs": <lista de los `option_id` que se le han mostrado; puede estar vacía>,
+#     "explored_programs": <lista de los `option_id` en que ha hecho click; puede estar vacía>,
 #     "area_of_int": <area_id de ultima opcion elegida (del inicio o del ultimo menu)>,
 #     "level_of_int": <level_id de ultima opcion elegida (del inicio o del ultimo menu)>,
 #     "puntaje": <puntaje saber11>
-# }
+# }ch
