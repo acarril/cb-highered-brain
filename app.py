@@ -406,11 +406,14 @@ def route_brain_menu_carreras(session_id):
     puntaje = int(body.get('puntaje'))
     decil = utils.compute_2020_decile(puntaje)
 
+    # Determine brain ID
+    brain_id = utils.select_random_brain_id()
+
     fixed_params = {
         "country": "COL"
     }
     random_params = {
-        "brain_id": utils.select_random_brain_id()
+        "brain_id": brain_id
     }
     user_params = {
         "location": 30, # NOTE! transformar

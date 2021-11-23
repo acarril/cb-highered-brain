@@ -16,9 +16,10 @@ def add_random_index(lst:list, index_name:str='index') -> list:
 
 
 def select_random_brain_id(brain_id_lst:list=None) -> str:
-    brain_names = ['Random', 'EconMatriculations', 'EconInteractions', 'Dynamic', 'ML']
+    brain_names = ['Random', 'EconMatriculations', 'ML'] # don't work: 'Dynamic', 'EconInteractions'
     brain_constraints = ['Unrestricted', 'Diverse', 'Targeted']
-    brain_id_lst = [f'{x}-{y}' for x in brain_names for y in brain_constraints]
+    if not brain_id_lst:
+        brain_id_lst = [f'{x}-{y}' for x in brain_names for y in brain_constraints]
     return random.choice(brain_id_lst)
 
 # {'Random': {'Unrestricted': 1, 'Diverse': 2, 'Targeted': 3},
