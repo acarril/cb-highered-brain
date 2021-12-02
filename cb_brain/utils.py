@@ -163,3 +163,11 @@ def map_areas(area_id_chatbot:int) -> int:
         return area_id_chatbot
     else:
         return random.choice(range(1, 9))
+
+def map_majors(major_id_chatbot:int) -> int:
+    if major_id_chatbot in range(1, 53):
+        return major_id_chatbot
+    elif major_id_chatbot in [54, 55, 56]:
+        return major_id_chatbot-1
+    else:
+        return random.choice(range(1,53))
