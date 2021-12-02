@@ -156,3 +156,10 @@ def calculador_pago_mensual(pct_pago_durante):
         }
     }
     return pct_to_attrs[pct_pago_durante]
+
+
+def map_areas(area_id_chatbot:int) -> int:
+    if area_id_chatbot in range(1, 9):
+        return area_id_chatbot
+    else:
+        return random.choice(range(1, 9))

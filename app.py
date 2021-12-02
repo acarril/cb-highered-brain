@@ -420,6 +420,9 @@ def route_brain_menu_carreras(session_id):
     # Determine brain ID
     brain_id = utils.select_random_brain_id()
 
+    # Options mapping
+    area_of_int = utils.map_areas(body.get('area_of_int'))
+
     fixed_params = {
         "country": "COL"
     }
@@ -436,7 +439,7 @@ def route_brain_menu_carreras(session_id):
         "gender": genero_dict[student_info.get('genero')]
     }
     session_params = {
-        'area_of_int': body.get('area_of_int'),
+        'area_of_int': area_of_int,
         'level_of_int': body.get('level_of_int'),
         "wage_deviation": utils.process_wage_deviation(body.get('wage_deviation')), # body.get('wage_deviation'),   # real in ~[-10, 10]
         "showed_majors": body.get('showed_programs'), # carreras que hemos mostrado
