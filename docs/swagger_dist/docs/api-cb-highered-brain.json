@@ -56,6 +56,29 @@
         }
       }
     },
+    "/celular/{celular}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "celular",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
     "/credits/caracteristicas_credito/{session_id}": {
       "post": {
         "produces": [

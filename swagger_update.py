@@ -70,7 +70,7 @@ def main():
     if args.no_options:
         json_content = delete_keys_from_dict(json_content, ['options'])
     json_content = add_query_params(json_content, '/students/{web_id}', params=params)
-    # json_content = add_body_to_post(json_content)
+    json_content = add_body_to_post(json_content)
     with open('docs/swagger_dist/docs/api-cb-highered-brain.json', 'w') as file:
         json.dump(json_content, file, indent=2)
     if not args.local:
