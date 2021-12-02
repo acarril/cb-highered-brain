@@ -486,33 +486,3 @@ def route_brain_menu_carreras(session_id):
 #     "level_of_int": <level_id de ultima opcion elegida (del inicio o del ultimo menu)>,
 #     "puntaje": <puntaje saber11>
 # }
-
-@app.route('/options_mapping/{year_in}/{option_id}', methods=['GET'], cors=True)
-def route_options_mapping_year_option(option_id, year_in):
-    def get_options_db(table_name):
-        """Get table from DDB"""
-        return db.DynamoDBOptions(
-            boto3.resource('dynamodb').Table(table_name)
-        )
-    table_name = 'icfesbot-program_mapping-2021'
-    option_id = int(option_id)
-    year_in = int(year_in)
-
-    showed_programs = [251, 3389]
-    showed_programs.append(option_id)
-    showed_programs_19 = [get_options_db(table_name).map_program_id(x, year_in) for x in showed_programs]
-    showed_programs_19 = [x for x in showed_programs_19 if x is not None]
-    return showed_programs_19
-    # return get_options_db(table_name).map_program_id(option_id, year_in)
-
-
-menu = {
-    "brain": "EconMatriculations-Targeted",
-    "menu": [
-        "4912",
-        "4947",
-        "2976",
-        "1103"
-    ],
-    "question": "Wage"
-}

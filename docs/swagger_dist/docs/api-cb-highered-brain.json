@@ -244,6 +244,35 @@
         }
       }
     },
+    "/options_mapping/{year_in}/{option_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "year_in",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
     "/options_table/areas": {
       "get": {
         "produces": [
