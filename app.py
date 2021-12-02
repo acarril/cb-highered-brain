@@ -401,11 +401,23 @@ def route_brain_menu_carreras_dummy(session_id):
 @app.route('/brain/menu_carreras/{session_id}', methods=['POST'], cors=True)
 def route_brain_menu_carreras(session_id):
     body = app.current_request.json_body
+    
     def get_student_info(session_id=session_id):
         session_info = get_sessions_db().get_item(session_id).pop()
         web_id = session_info.get('web_id')
         student_info = get_students_db().get_item(web_id).pop()
         return student_info
+    
+    def get_options_db(table_name='icfesbot-program_mapping-2021'):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+
+    def get_program_mapping_list(programs_list:list, year_in:int) -> list:
+        programs_list_mapped = [get_options_db().map_program_id(x, year_in) for x in programs_list]
+        programs_list_mapped = [int(x) for x in programs_list_mapped if x is not None]
+        return programs_list_mapped
     
     # Get student info and create dicts for brain translation
     student_info = get_student_info(session_id)
@@ -420,8 +432,12 @@ def route_brain_menu_carreras(session_id):
     # Determine brain ID
     brain_id = utils.select_random_brain_id()
 
-    # Options mapping
+    # Area mapping
     area_of_int = utils.map_areas(body.get('area_of_int'))
+
+    # Program mapping : IN
+    showed_programs_19 = get_program_mapping_list(body.get('showed_programs'), 2021)
+    explored_programs_19 = get_program_mapping_list(body.get('explored_programs'), 2021)
 
     fixed_params = {
         "country": "COL"
@@ -442,8 +458,8 @@ def route_brain_menu_carreras(session_id):
         'area_of_int': area_of_int,
         'level_of_int': body.get('level_of_int'),
         "wage_deviation": utils.process_wage_deviation(body.get('wage_deviation')), # body.get('wage_deviation'),   # real in ~[-10, 10]
-        "showed_majors": body.get('showed_programs'), # carreras que hemos mostrado
-        "explored_majors": body.get('explored_programs') # carreras que ha hecho click
+        "showed_majors": showed_programs_19, # carreras que hemos mostrado
+        "explored_majors": explored_programs_19 # carreras que ha hecho click
     }
     dict_for_brains = {
         **fixed_params,
@@ -454,7 +470,13 @@ def route_brain_menu_carreras(session_id):
 
     ec2_url = 'http://ec2-3-238-222-45.compute-1.amazonaws.com:5000/'
     brain_response = requests.post(ec2_url, json=dict_for_brains)
-    return brain_response.content
+    brain_response = brain_response.json()
+
+    menu_out_21 = get_program_mapping_list([int(x) for x in brain_response['menu']], 2019)
+    menu_out_21 = [str(x) for x in menu_out_21]
+
+    brain_response['menu'] = menu_out_21
+    return brain_response
 
 # {
 #     "wage_deviation": <dif calculada en datoreal_opcion; multiplicada por -1 si subestima, o 0 si está en rango>,
@@ -463,4 +485,34 @@ def route_brain_menu_carreras(session_id):
 #     "area_of_int": <area_id de ultima opcion elegida (del inicio o del ultimo menu)>,
 #     "level_of_int": <level_id de ultima opcion elegida (del inicio o del ultimo menu)>,
 #     "puntaje": <puntaje saber11>
-# }ch
+# }
+
+@app.route('/options_mapping/{year_in}/{option_id}', methods=['GET'], cors=True)
+def route_options_mapping_year_option(option_id, year_in):
+    def get_options_db(table_name):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = 'icfesbot-program_mapping-2021'
+    option_id = int(option_id)
+    year_in = int(year_in)
+
+    showed_programs = [251, 3389]
+    showed_programs.append(option_id)
+    showed_programs_19 = [get_options_db(table_name).map_program_id(x, year_in) for x in showed_programs]
+    showed_programs_19 = [x for x in showed_programs_19 if x is not None]
+    return showed_programs_19
+    # return get_options_db(table_name).map_program_id(option_id, year_in)
+
+
+menu = {
+    "brain": "EconMatriculations-Targeted",
+    "menu": [
+        "4912",
+        "4947",
+        "2976",
+        "1103"
+    ],
+    "question": "Wage"
+}

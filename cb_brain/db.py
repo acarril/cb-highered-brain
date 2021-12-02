@@ -278,3 +278,24 @@ class DynamoDBOptions(ChatBotDB):
             response = self._table.get_item(Key={'option_id': item})
             programs.append(response['Item']) 
         return programs
+
+    def map_program_id(self, option_id:int, year_in:int) -> int:
+        if year_in not in (2019, 2021):
+            raise ValueError('`year_in` has to be 2019 or 2021')
+        elif year_in == 2019:
+            response = self._table.query(
+                IndexName='id19-index',
+                KeyConditionExpression=Key('id19').eq(option_id)
+            )
+            try:
+                ids = response['Items'].pop()
+                return ids['id21']
+            except IndexError:
+                return
+        elif year_in == 2021:
+            response = self._table.get_item(Key={'id21': option_id})
+            try:
+                ids = response['Item']
+                return ids['id19']
+            except KeyError:
+                return
