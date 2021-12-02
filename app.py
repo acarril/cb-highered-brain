@@ -259,6 +259,17 @@ def route_options_table_program_ids_get():
     return get_options_db(table_name).get_programs_by_id(options_id_lst)
 
 
+@app.route('/celular/{celular}', methods=['GET'], cors=True)
+def route_celular(celular):
+    table_stub = 'cellphones'
+    def get_options_db(table_name):
+        """Get table from DDB"""
+        return db.DynamoDBOptions(
+            boto3.resource('dynamodb').Table(table_name)
+        )
+    table_name = f'icfesbot-{table_stub}-2021'
+    return get_options_db(table_name).get_item(celular).pop()
+
 # Credit Check
 
 @app.route('/credits/oferta_creditos/{session_id}', methods=['POST'], cors=True)
